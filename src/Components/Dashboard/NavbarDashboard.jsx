@@ -6,12 +6,13 @@ import React from 'react'
 import { IoSunnySharp } from "react-icons/io5"
 
 import { authClient } from '@/lib/auth-client'
-import NavLink from './NavLink'
+
 import { GiArmorUpgrade } from 'react-icons/gi'
 import { FaCrown } from 'react-icons/fa'
-import { usePathname } from 'next/navigation'
+import NavLink from '../NavLink'
 
-const Navbar = () => {
+
+const NavbarDashboard = () => {
   const { data: session } = authClient.useSession()
   const user = session?.user
 
@@ -28,33 +29,15 @@ const Navbar = () => {
     })
   }
 
-  const pathname=usePathname()
-  if(pathname.includes('dashboard')){
-    return null
-  }
-
-  const dashboardLinks={
-    user:'dashboard/user',
-    admin:'dashboard/admin'
-  }
 
   return (
-    <div className="sticky top-0 z-50 bg-[#081221]/90 backdrop-blur border-b border-[#223753]">
-      <div className="navbar max-w-6xl mx-auto text-[#F8FAFC]">
+    <div className="sticky top-0 py-2 z-50 w-full bg-[#081221]/90 backdrop-blur border-b border-[#223753]">
 
-        {/* LEFT */}
-        <div className="navbar-start">
-          <div className="flex items-center gap-2">
-            <Image src="/assets/logo.png" alt="logo" width={50} height={50} />
+  <div className="navbar w-full px-4 lg:px-8 text-[#F8FAFC]">
 
-            <Link href="/" className="text-xl font-bold">
-              <span className="text-[#3B82F6]">LIFE</span>ATLAS
-            </Link>
-          </div>
-        </div>
 
         {/* CENTER */}
-        <div className="navbar-center hidden lg:flex">
+        <div className="navbar-start hidden lg:flex">
           <ul className="menu menu-horizontal text-base font-semibold gap-4">
 
             <NavLink href="/"><li>Home</li></NavLink>
@@ -158,7 +141,7 @@ const Navbar = () => {
                     </li>
 
                     <li>
-                      <Link href={dashboardLinks[user?.role]} className="text-[#B8C4D6] hover:text-[#3B82F6]">
+                      <Link href="/dashboard" className="text-[#B8C4D6] hover:text-[#3B82F6]">
                         Dashboard
                       </Link>
                     </li>
@@ -204,4 +187,4 @@ const Navbar = () => {
   )
 }
 
-export default Navbar
+export default NavbarDashboard
