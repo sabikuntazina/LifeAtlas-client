@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import toast from "react-hot-toast";
 import { FiLock, FiChevronDown, FiUpload } from "react-icons/fi";
+import { postLesson } from "@/lib/action/addLesson";
+import { toast } from "react-toastify";
 
 /* ------------------ CUSTOM SELECT COMPONENT ------------------ */
 function CustomSelect({
@@ -20,6 +21,7 @@ function CustomSelect({
 }) {
   return (
     <div className="space-y-2 relative">
+
       {/* LABEL */}
       <div className="flex items-center justify-between">
         <label className="text-sm font-medium text-[#B8C4D6]">
@@ -92,6 +94,10 @@ export default function AddLessonPage() {
 
   const [category, setCategory] = useState("Personal Growth");
   const [tone, setTone] = useState("Motivational");
+
+  // ✅ NEW FIELD: visibility
+  const [visibility, setVisibility] = useState("public");
+
   const [access, setAccess] = useState("free");
   const [imageUrl, setImageUrl] = useState("");
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -144,25 +150,29 @@ export default function AddLessonPage() {
       tone,
       image: imageUrl,
       access: isPremium ? access : "free",
+      visibility,
+      creatorName:user?.name,
+      creatorId:user?.id,
+      creatorPlan: user?.plan,
+      creatorRole:user?.role,
+      creatorImg:user?.image,
+      
     };
 
-    try {
-      const res = await fetch("/api/lessons", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
+    // console.log(payload);
 
-      if (!res.ok) throw new Error();
+    const res = await postLesson(payload);
 
+    if (res?.insertedId) {
       toast.success("Lesson created!");
       e.target.reset();
       setImageUrl("");
-    } catch {
+      setVisibility("public");
+    } else {
       toast.error("Failed to create lesson");
-    } finally {
-      setLoading(false);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -185,7 +195,7 @@ export default function AddLessonPage() {
           className="relative bg-[#0D1B2A] border border-[#223753] rounded-2xl p-8 space-y-6"
         >
 
-          {/* TITLE INPUT (FIXED) */}
+          {/* TITLE */}
           <div className="space-y-2">
             <label className="text-sm text-[#B8C4D6]">
               Lesson Title
@@ -243,6 +253,8 @@ export default function AddLessonPage() {
             />
           </div>
 
+        
+
           {/* IMAGE */}
           <div className="space-y-2">
             <label className="text-sm text-[#B8C4D6]">
@@ -267,6 +279,18 @@ export default function AddLessonPage() {
             )}
           </div>
 
+            {/* VISIBILITY (NEW DROPDOWN) */}
+          <CustomSelect
+            label="Visibility"
+            helper="Who can see this lesson?"
+            value={visibility}
+            setValue={setVisibility}
+            options={["public", "private"]}
+            openDropdown={openDropdown}
+            setOpenDropdown={setOpenDropdown}
+            id="visibility"
+          />
+
           {/* ACCESS */}
           <CustomSelect
             label="Access Level"
@@ -288,6 +312,7 @@ export default function AddLessonPage() {
           >
             {loading ? "Creating..." : "Publish Lesson"}
           </button>
+
         </form>
       </div>
     </div>

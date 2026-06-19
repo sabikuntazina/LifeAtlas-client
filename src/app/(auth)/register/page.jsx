@@ -4,10 +4,10 @@ import { authClient } from "@/lib/auth-client"
 import Image from "next/image"
 import Link from "next/link"
 import React, { useState } from "react"
-import toast from "react-hot-toast"
 import { FaGoogle } from "react-icons/fa"
 import { FiUserPlus } from "react-icons/fi"
 import { useRouter } from "next/navigation"
+import { toast } from "react-toastify"
 
 const RegisterPage = () => {
   const [error, setError] = useState("")

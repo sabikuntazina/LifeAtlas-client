@@ -58,7 +58,7 @@ const Navbar = () => {
           <ul className="menu menu-horizontal text-base font-semibold gap-4">
 
             <NavLink href="/"><li>Home</li></NavLink>
-            <NavLink href="/public-lessons"><li>All Lessons</li></NavLink>
+            <NavLink href="/alllessons"><li>All Lessons</li></NavLink>
 
             {/* ✅ ONLY USER CAN SEE THESE */}
             {user && !isAdmin && (
@@ -174,7 +174,7 @@ const Navbar = () => {
                     </li>
 
                     <li>
-                      <Link href="/public-lessons" className="text-[#B8C4D6] hover:text-[#3B82F6]">
+                      <Link href="/alllessons" className="text-[#B8C4D6] hover:text-[#3B82F6]">
                         Public Lessons
                       </Link>
                     </li>

@@ -14,16 +14,50 @@ export default function ProfilePage() {
   const { data: session } = authClient.useSession();
   const user = session?.user;
 
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-[#081221] text-white">
-        Loading...
-      </div>
-    );
-  }
+ if (!user) {
+  return (
+    <div className="min-h-screen bg-[#081221] flex items-center justify-center px-4">
+      <div className="w-full max-w-4xl rounded-2xl border border-[#223753] bg-[#0D1B2A] p-8 animate-pulse">
 
-  const isPremium = user.plan === "premium";
-  const isAdmin = user.role === "admin";
+        {/* Header */}
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-28 h-28 rounded-full bg-[#11243A]" />
+
+          <div className="space-y-3 text-center">
+            <div className="h-6 w-48 bg-[#11243A] rounded-lg mx-auto" />
+            <div className="h-4 w-64 bg-[#11243A] rounded-lg mx-auto" />
+            <div className="h-3 w-40 bg-[#11243A] rounded-lg mx-auto" />
+          </div>
+        </div>
+
+        {/* Badges */}
+        <div className="flex justify-center gap-3 mt-8">
+          <div className="h-8 w-24 bg-[#11243A] rounded-full" />
+          <div className="h-8 w-24 bg-[#11243A] rounded-full" />
+        </div>
+
+        {/* Info Grid */}
+        <div className="grid md:grid-cols-2 gap-4 mt-8">
+          {[1, 2, 3, 4].map((item) => (
+            <div
+              key={item}
+              className="p-4 rounded-xl border border-[#223753] bg-[#11243A]"
+            >
+              <div className="h-3 w-20 bg-[#1B3654] rounded mb-3" />
+              <div className="h-4 w-full bg-[#1B3654] rounded" />
+            </div>
+          ))}
+        </div>
+
+        {/* Banner */}
+        <div className="mt-6 h-14 rounded-xl bg-[#11243A]" />
+      </div>
+    </div>
+  );
+}
+
+  const isPremium = user?.plan === "premium";
+  const isAdmin = user?.role === "admin";
 
   return (
     <div className="min-h-screen bg-[#081221] text-white px-4 py-12">
@@ -58,7 +92,7 @@ export default function ProfilePage() {
               {/* AVATAR */}
               <div className="relative">
                 <img
-                  src={user.image}
+                  src={user?.image}
                   alt="profile"
                   className="w-28 h-28 rounded-full object-cover border-2 border-[#223753]"
                 />
@@ -74,17 +108,17 @@ export default function ProfilePage() {
               <div className="space-y-2 text-center md:text-left">
                 <h2 className="text-2xl font-semibold flex items-center gap-2 justify-center md:justify-start">
                   <FiUser className="text-[#3B82F6]" />
-                  {user.name}
+                  {user?.name}
                 </h2>
 
                 <p className="text-[#8CA0B8] flex items-center gap-2 justify-center md:justify-start">
                   <FiMail />
-                  {user.email}
+                  {user?.email}
                 </p>
 
                 <p className="text-xs text-[#6B7C93] flex items-center gap-2 justify-center md:justify-start">
                   <FiCalendar />
-                  Joined {new Date(user.createdAt).toDateString()}
+                  Joined {new Date(user?.createdAt).toDateString()}
                 </p>
               </div>
             </div>
@@ -111,7 +145,7 @@ export default function ProfilePage() {
               }`}
             >
               <FiShield />
-              {user.role.toUpperCase()}
+              {user?.role.toUpperCase()}
             </span>
 
             {/* PLAN */}
@@ -124,7 +158,7 @@ export default function ProfilePage() {
               }`}
             >
               <FiStar />
-              {user.plan.toUpperCase()}
+              {user?.plan.toUpperCase()}
             </span>
           </div>
 
@@ -134,28 +168,28 @@ export default function ProfilePage() {
             <div className="p-4 rounded-xl bg-[#11243A] border border-[#223753]">
               <p className="text-xs text-[#7C8CA1]">User ID</p>
               <p className="text-sm break-all mt-1 text-white/80">
-                {user.id || user._id}
+                {user?.id || user?._id}
               </p>
             </div>
 
             <div className="p-4 rounded-xl bg-[#11243A] border border-[#223753]">
               <p className="text-xs text-[#7C8CA1]">Account Type</p>
               <p className="text-sm mt-1 text-white/80 capitalize">
-                {user.role}
+                {user?.role}
               </p>
             </div>
 
             <div className="p-4 rounded-xl bg-[#11243A] border border-[#223753]">
               <p className="text-xs text-[#7C7CA1]">Plan</p>
               <p className="text-sm mt-1 text-white/80 capitalize">
-                {user.plan}
+                {user?.plan}
               </p>
             </div>
 
             <div className="p-4 rounded-xl bg-[#11243A] border border-[#223753]">
               <p className="text-xs text-[#7C7CA1]">Email Status</p>
               <p className="text-sm mt-1 text-white/80">
-                {user.emailVerified ? "Verified" : "Not Verified"}
+                {user?.emailVerified ? "Verified" : "Not Verified"}
               </p>
             </div>
           </div>

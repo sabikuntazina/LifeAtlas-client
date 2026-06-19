@@ -3,12 +3,13 @@
 import { authClient } from "@/lib/auth-client"
 import Image from "next/image"
 import React, { useState } from "react"
-import toast from "react-hot-toast"
+
 import { FaGoogle } from "react-icons/fa"
 import { FiEye, FiEyeOff } from "react-icons/fi"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { IoMdLogIn } from "react-icons/io"
+import { toast } from "react-toastify"
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false)
