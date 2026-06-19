@@ -3,20 +3,27 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
-import { IoSunnySharp } from "react-icons/io5"
+import { FaCrown } from 'react-icons/fa'
+import { usePathname } from 'next/navigation'
 
 import { authClient } from '@/lib/auth-client'
 import NavLink from './NavLink'
-import { GiArmorUpgrade } from 'react-icons/gi'
-import { FaCrown } from 'react-icons/fa'
-import { usePathname } from 'next/navigation'
 
 const Navbar = () => {
   const { data: session } = authClient.useSession()
   const user = session?.user
 
-  // ✅ YOUR REQUIRED LOGIC
-  const showUpgrade = user?.plan !== "premium"
+  const pathname = usePathname()
+
+  if (pathname.includes('dashboard')) {
+    return null
+  }
+
+  const isPremium = user?.plan === "premium"
+  const isAdmin = user?.role === "admin"
+
+  // ✅ Upgrade only for non-premium USERS (not admin)
+  const showUpgrade = user && !isPremium && !isAdmin
 
   const handleSignOut = async () => {
     await authClient.signOut({
@@ -28,14 +35,9 @@ const Navbar = () => {
     })
   }
 
-  const pathname=usePathname()
-  if(pathname.includes('dashboard')){
-    return null
-  }
-
-  const dashboardLinks={
-    user:'dashboard/user',
-    admin:'dashboard/admin'
+  const dashboardLinks = {
+    user: 'dashboard/user',
+    admin: 'dashboard/admin'
   }
 
   return (
@@ -43,14 +45,12 @@ const Navbar = () => {
       <div className="navbar max-w-6xl mx-auto text-[#F8FAFC]">
 
         {/* LEFT */}
-        <div className="navbar-start">
-          <div className="flex items-center gap-2">
-            <Image src="/assets/logo.png" alt="logo" width={50} height={50} />
+        <div className="navbar-start flex items-center gap-2">
+          <Image src="/assets/logo.png" alt="logo" width={50} height={50} />
 
-            <Link href="/" className="text-xl font-bold">
-              <span className="text-[#3B82F6]">LIFE</span>ATLAS
-            </Link>
-          </div>
+          <Link href="/" className="text-xl font-bold">
+            <span className="text-[#3B82F6]">LIFE</span>ATLAS
+          </Link>
         </div>
 
         {/* CENTER */}
@@ -60,10 +60,16 @@ const Navbar = () => {
             <NavLink href="/"><li>Home</li></NavLink>
             <NavLink href="/public-lessons"><li>All Lessons</li></NavLink>
 
-            {user && (
+            {/* ✅ ONLY USER CAN SEE THESE */}
+            {user && !isAdmin && (
               <>
-                <NavLink href="/dashboard/add-lesson"><li>Add Lesson</li></NavLink>
-                <NavLink href="/dashboard/my-lessons"><li>My Lessons</li></NavLink>
+                <NavLink href="/dashboard/add-lesson">
+                  <li>Add Lesson</li>
+                </NavLink>
+
+                <NavLink href="/dashboard/my-lessons">
+                  <li>My Lessons</li>
+                </NavLink>
               </>
             )}
 
@@ -101,13 +107,14 @@ const Navbar = () => {
               /* LOGGED IN */
               <div className="flex items-center gap-3">
 
-                {/* ✅ UPGRADE BUTTON FIXED */}
+                {/* ✅ UPGRADE BUTTON (USER ONLY) */}
                 {showUpgrade && (
                   <Link
                     href="/pricing"
-                    className="btn btn-sm text-lg font-semibold bg-gradient-to-r from-[#FBBF24] to-[#F59E0B] hover:from-[#F59E0B] hover:to-[#D97706] text-[#111827] border-none rounded-xl"
+                    className="btn btn-sm text-sm font-semibold bg-gradient-to-r from-[#FBBF24] to-[#F59E0B] hover:from-[#F59E0B] hover:to-[#D97706] text-[#111827] border-none rounded-xl"
                   >
-                    <FaCrown />Upgrade
+                    <FaCrown />
+                    Upgrade
                   </Link>
                 )}
 
@@ -158,7 +165,10 @@ const Navbar = () => {
                     </li>
 
                     <li>
-                      <Link href={dashboardLinks[user?.role]} className="text-[#B8C4D6] hover:text-[#3B82F6]">
+                      <Link
+                        href={dashboardLinks[user?.role]}
+                        className="text-[#B8C4D6] hover:text-[#3B82F6]"
+                      >
                         Dashboard
                       </Link>
                     </li>
@@ -172,8 +182,8 @@ const Navbar = () => {
                     {/* optional upgrade inside dropdown */}
                     {showUpgrade && (
                       <li>
-                        <Link href="/pricing" className="text-[#3B82F6] font-medium">
-                        <FaCrown />
+                        <Link href="/pricing" className="text-[#3B82F6] font-medium flex items-center gap-2">
+                          <FaCrown />
                           Upgrade Plan
                         </Link>
                       </li>

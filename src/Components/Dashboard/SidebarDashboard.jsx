@@ -37,7 +37,7 @@ export default function SidebarDashboard() {
       { icon: MdOutlineLibraryBooks, href: '/dashboard/user/my-lessons', label: 'My Lessons' },
       { icon: RiEdit2Line, href: '/dashboard/user/update-lesson', label: 'Update Lesson' },
       { icon: FiHeart, href: '/dashboard/user/favourites', label: 'My Favourites' },
-      { icon: FiUser, href: '/dashboard/user/profile', label: 'Profile' },
+      { icon: FiUser, href: '/profile', label: 'Profile' },
     ],
 
     admin: [
@@ -45,7 +45,7 @@ export default function SidebarDashboard() {
       { icon: FiUsers, href: '/dashboard/admin/manage-users', label: 'Manage Users' },
       { icon: MdOutlineManageAccounts, href: '/dashboard/admin/manage-lessons', label: 'Manage Lessons' },
       { icon: FiFlag, href: '/dashboard/admin/reported-lessons', label: 'Reported Lessons' },
-      { icon: FiUser, href: '/dashboard/admin/profile', label: 'Profile' },
+      { icon: FiUser, href: '/profile', label: 'Profile' },
     ],
   }
 
