@@ -1,18 +1,20 @@
-'use client'
+'use client';
+
+import Link from "next/link";
 import { FiLock } from "react-icons/fi";
 
 export default function LessonCard({ lesson, user }) {
   const isPremiumUser = user?.plan === "premium";
+
   const isLocked =
     lesson.access === "premium" && !isPremiumUser;
 
   return (
-    <div className="relative rounded-xl border border-white/10 bg-[#0B1220] shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+    <div className="relative h-full rounded-xl border border-white/10 bg-[#0B1220] shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
 
       {/* LOCK OVERLAY */}
       {isLocked && (
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-black/70 backdrop-blur-md rounded-xl text-center p-5">
-          
           <FiLock className="text-4xl text-[#3B82F6] mb-3" />
 
           <p className="text-white font-semibold text-sm">
@@ -24,8 +26,8 @@ export default function LessonCard({ lesson, user }) {
           </p>
 
           <button
-            className="mt-4 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-blue-500 text-white text-sm font-medium transition"
             onClick={() => (window.location.href = "/pricing")}
+            className="mt-4 px-4 py-2 rounded-lg bg-[#3B82F6] hover:bg-blue-500 text-white text-sm font-medium transition"
           >
             Upgrade
           </button>
@@ -33,21 +35,23 @@ export default function LessonCard({ lesson, user }) {
       )}
 
       {/* CONTENT */}
-      <div className={`p-5 ${isLocked ? "blur-sm select-none" : ""}`}>
-
+      <div
+        className={`p-5 flex flex-col h-full ${
+          isLocked ? "blur-sm select-none" : ""
+        }`}
+      >
         {/* TITLE */}
         <h2 className="text-lg font-semibold text-white leading-snug">
           {lesson.title}
         </h2>
 
         {/* DESCRIPTION */}
-        <p className="text-sm text-gray-300 mt-2 line-clamp-2">
+        <p className="text-sm text-gray-300 mt-2 line-clamp-3">
           {lesson.description}
         </p>
 
         {/* META BADGES */}
         <div className="flex flex-wrap gap-2 mt-4">
-
           <span className="px-2 py-1 text-xs rounded-full bg-blue-500/10 text-blue-300 border border-blue-500/20">
             {lesson.category}
           </span>
@@ -65,28 +69,33 @@ export default function LessonCard({ lesson, user }) {
               Free
             </span>
           )}
-
         </div>
 
         {/* CREATOR */}
-        <div className="mt-3 text-xs text-gray-400">
-          By <span className="text-white font-medium">{lesson.userName}</span>
+        <div className="mt-4">
+          <p className="text-xs text-gray-400">
+            By{" "}
+            <span className="text-white font-medium">
+              {lesson.userName}
+            </span>
+          </p>
+
+          <p className="text-xs text-gray-500 mt-1">
+            {lesson.createdAt
+              ? new Date(lesson.createdAt).toDateString()
+              : "N/A"}
+          </p>
         </div>
 
-        <div className="text-xs text-gray-500">
-          {new Date(lesson.createdAt).toDateString()}
+        {/* BUTTON ALWAYS AT BOTTOM */}
+        <div className="mt-auto pt-5">
+          <Link
+            href={`/alllessons/${lesson._id}`}
+            className="flex items-center justify-center w-full rounded-lg bg-[#3B82F6] px-4 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-blue-500 hover:shadow-lg hover:shadow-blue-500/20"
+          >
+            See Details
+          </Link>
         </div>
-
-        {/* ACTION */}
-        <button
-          className="mt-4 w-full py-2 rounded-lg bg-[#3B82F6] hover:bg-blue-500 text-white text-sm font-medium transition"
-          onClick={() =>
-            (window.location.href = `/lessons/${lesson._id}`)
-          }
-        >
-          See Details
-        </button>
-
       </div>
     </div>
   );

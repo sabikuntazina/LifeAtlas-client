@@ -11,6 +11,7 @@ import Link from "next/link"
 import { IoMdLogIn } from "react-icons/io"
 import { toast } from "react-toastify"
 
+
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false)
 
@@ -25,6 +26,7 @@ const LoginPage = () => {
       email: user.email,
       password: user.password,
     })
+
 
     if (data) {
       toast.success("Welcome to Life Atlas")

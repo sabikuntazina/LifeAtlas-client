@@ -19,8 +19,10 @@ export const getPublicLessons = async () => {
 /* ---------------------------------------
    GET MY LESSONS (Dashboard Table)
 ----------------------------------------*/
-export const getMyLessons = async (userId) => {
-  const res = await fetch(`${BASE_URL}/lessons/my/${userId}`);
+export const getMyLessons = async (creatorId) => {
+  
+  const res = await fetch(`${BASE_URL}/lessons/my/${creatorId}`);
+  console.log("Data in response", res)
   return res.json();
 };
 
