@@ -1,14 +1,12 @@
+import MyFavoriteLessonTable from '@/Components/MyFavoriteLessonTable';
 import { getFavoriteLessons } from '@/lib/api/favoriteLesson';
 import { getLessonById } from '@/lib/api/getAllLessons';
 import { getServerSession } from '@/lib/core/session';
 
-import React from 'react';
-import MyFavoriteLessonsTable from './MyFavoriteLessonPage';
 
 const MyFavoriteLessonPage = async () => {
   const user = await getServerSession();
-  
-  // সেফটি গার্ড: ইউজার লগইন না থাকলে মেসেজ দেখাবে
+
   if (!user?.id) {
     return (
       <div className="min-h-screen bg-[#081221] text-white flex items-center justify-center p-4">
@@ -20,10 +18,10 @@ const MyFavoriteLessonPage = async () => {
     );
   }
 
-  // ১. ফেভারিট লেসন কালেকশন ডাটা আনা
+
   const favoriteData = await getFavoriteLessons(user.id);
   
-  // ২. সবগুলোর মেইন ডিটেইলস ডাটা একবারে Promise.all দিয়ে আনা
+
   let detailedLessons = [];
   if (favoriteData && favoriteData.length > 0) {
     detailedLessons = await Promise.all(
@@ -55,11 +53,12 @@ const MyFavoriteLessonPage = async () => {
           </p>
         </div>
 
-        {/* টেবিল কম্পোনেন্ট কল ও ডাটা পাসিং */}
-        <MyFavoriteLessonsTable 
+<MyFavoriteLessonTable initialLessons={detailedLessons} 
+          favoriteData={favoriteData} ></MyFavoriteLessonTable>
+  {/* <MyFavoriteLessonPage
           initialLessons={detailedLessons} 
           favoriteData={favoriteData} 
-        />
+        />       */}
         
       </div>
     </div>

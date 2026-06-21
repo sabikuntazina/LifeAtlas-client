@@ -163,7 +163,7 @@ export default function AddLessonPage() {
 
     const res = await postLesson(payload);
 
-    if (res?.insertedId) {
+    if (res?.insertedId || res?.acknowledged) {
       toast.success("Lesson created!");
       e.target.reset();
       setImageUrl("");

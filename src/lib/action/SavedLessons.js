@@ -1,3 +1,7 @@
+"use server"
+
+import { authHeader } from "../core/session";
+
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
 
 // 📥 POST SAVED LESSON
@@ -6,7 +10,8 @@ export const postSavedLessons = async (saveData) => {
     const res = await fetch(`${BASE_URL}/savedlessons`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        ...await authHeader(),
       },
       body: JSON.stringify(saveData)
     });
@@ -35,17 +40,18 @@ export const postSavedLessons = async (saveData) => {
 // ❤️ POST LIKED LESSON
 export const postLikedLessons = async (likeData) => {
   try {
-    const res = await fetch(`${BASE_URL}/likedlessons`, { // আপনার ব্যাকএন্ড রাউটের সাথে মিল রাখুন
+    const res = await fetch(`${BASE_URL}/likedlessons`, { 
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        ...await authHeader(),
       },
       body: JSON.stringify(likeData)
     });
 
     const contentType = res.headers.get("content-type");
     
-    // যদি ব্যাকএন্ড থেকে এরর আসে (যেমন অলরেডি লাইকড হলে ৪০০ আসবে)
+    
     if (!res.ok) {
       if (contentType && contentType.includes("application/json")) {
         const errorData = await res.json();
@@ -63,12 +69,13 @@ export const postLikedLessons = async (likeData) => {
     return { success: false, message: "Network error, please try again!" };
   }
 };
-//to Store the lesson what user Lived❤️
+//to Store the comment 
 export const postComment=async(commentData)=>{
    const res= await fetch(`${BASE_URL}/comment` , {
       method: 'POST',
       headers: {
-        'Content-type' : 'application/json'
+        'Content-type' : 'application/json',
+        ...await authHeader(),
       },
        body : JSON.stringify(commentData)
     })

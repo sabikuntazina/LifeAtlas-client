@@ -36,6 +36,15 @@ const handleSaveLesson = async () => {
     
     const saveLessonData = {
       lessonId: lesson._id || id, 
+      title:lesson.title,
+      description:lesson.description,
+      category:lesson.category,
+      tone:lesson.tone,
+      image:lesson.image,
+      access:lesson.access,
+      visibility:lesson.visibility,
+      creatorName:lesson.creatorName,
+      creatorId:lesson.creatorId,
       userId: user.id,
       userName: user.name,
       userImage: user.image,
@@ -70,6 +79,15 @@ const handleLikedLesson = async () => {
 
     const likeLessonData = {
       lessonId: lesson._id || id, 
+      title:lesson.title,
+      description:lesson.description,
+      category:lesson.category,
+      tone:lesson.tone,
+      image:lesson.image,
+      access:lesson.access,
+      visibility:lesson.visibility,
+      creatorName:lesson.creatorName,
+      creatorId:lesson.creatorId,
       userId: user.id,
       userName: user.name,
       userImage: user.image,

@@ -5,7 +5,7 @@ import React, { useState, useMemo } from "react";
 import { FiEye, FiTrash2, FiFilter, FiFolder } from "react-icons/fi";
 import { toast } from "react-toastify";
 
-export default function MyFavoriteLessonsTable({ initialLessons, favoriteData }) {
+export default function MyFavoriteLessonTable({ initialLessons, favoriteData }) {
   const [lessons, setLessons] = useState(initialLessons || []);
   const [selectedCategory, setSelectedCategory] = useState("all");
 
@@ -32,7 +32,7 @@ export default function MyFavoriteLessonsTable({ initialLessons, favoriteData })
     }
 
     try {
-      // আপনার ডিলিট এপিআই কল করার জায়গা এটি
+      
       setLessons((prev) => prev.filter((l) => (l._id || l.id) !== lessonId));
       toast.success("Lesson removed from favorites!");
     } catch (err) {
@@ -98,16 +98,14 @@ export default function MyFavoriteLessonsTable({ initialLessons, favoriteData })
 
             {/* Table Body */}
             <tbody className="divide-y divide-[#223753]/40 text-xs text-white/90">
-              {filteredLessons.map((lesson, index) => { // 👈 এখানে index প্যারামিটার যোগ করা হয়েছে
+              {filteredLessons.map((lesson, index) => { 
                 if (!lesson) return null;
-                
-                // আইডি জেনারেট করার সেফ লজিক (প্রথমে _id, তারপর id, না থাকলে index)
+          
                 const currentKey = lesson._id || lesson.id || `lesson-fallback-${index}`;
 
                 return (
                   <tr key={currentKey} className="hover:bg-[#11243A]/30 transition-all duration-200">
                     
-                    {/* লেসন টাইটেল ও ডেসক্রিপশন */}
                     <td className="p-4 pl-6 max-w-xs sm:max-w-sm md:max-w-md">
                       <div className="font-semibold text-sm text-white/95 truncate tracking-wide hover:text-[#3B82F6] transition-colors">
                         {lesson.title}
@@ -117,7 +115,7 @@ export default function MyFavoriteLessonsTable({ initialLessons, favoriteData })
                       </div>
                     </td>
 
-                    {/* মডার্ন ডট ব্যাজ ডিজাইন */}
+                  
                     <td className="p-4">
                       <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-medium rounded-lg bg-[#3B82F6]/10 text-[#3B82F6] border border-[#3B82F6]/20 capitalize">
                         <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6]" />
@@ -125,16 +123,16 @@ export default function MyFavoriteLessonsTable({ initialLessons, favoriteData })
                       </span>
                     </td>
 
-                    {/* ডিউরেশন */}
+             
                     <td className="p-4 text-[#8CA0B8] font-medium">
                       {lesson.duration || "—"} mins
                     </td>
 
-                    {/* প্রফেশনাল অ্যাকশন আইকন বাটন */}
+           
                     <td className="p-4 pr-6">
                       <div className="flex items-center justify-end gap-2.5">
                         
-                        {/* View Button */}
+                  
                         <Link
                           href={`/alllessons/${lesson._id || lesson.id}`}
                           className="w-9 h-9 flex items-center justify-center bg-[#11243A] hover:bg-[#1C3554] border border-[#223753] text-[#8CA0B8] hover:text-[#3B82F6] hover:border-[#3B82F6]/60 rounded-xl transition-all shadow-sm tooltip"
@@ -143,7 +141,7 @@ export default function MyFavoriteLessonsTable({ initialLessons, favoriteData })
                           <FiEye size={15} />
                         </Link>
 
-                        {/* Remove Button */}
+                  
                         <button
                           onClick={() => handleRemove(lesson._id || lesson.id)}
                           className="w-9 h-9 flex items-center justify-center bg-red-500/5 hover:bg-red-500 text-red-400 hover:text-white border border-red-500/15 hover:border-transparent rounded-xl transition-all shadow-sm cursor-pointer"

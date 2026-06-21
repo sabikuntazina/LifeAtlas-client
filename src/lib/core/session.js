@@ -1,3 +1,4 @@
+'use server'
 import { headers } from "next/headers";
 import { auth } from "../auth";
 import { authClient } from "../auth-client";
@@ -17,6 +18,7 @@ export const getToken= async()=>{
     const session = await auth.api.getSession({
       headers: await headers(),
     });
+    console.log("Auth session", session?.session)
     return session?.session?.token ||null
 }
 
