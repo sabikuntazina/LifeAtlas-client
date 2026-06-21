@@ -311,11 +311,11 @@ export default function MyLessonsTableClient({ initialLessons = [], user }) {
                     <td className="px-6 py-4">
                       <div className="flex items-center justify-center gap-3 text-xs text-[#B8C4D6]">
                         <span className="flex items-center gap-1" title="Likes">
-                          <BiSolidLike className="text-blue-500 text-sm" /> {lesson.liked || 0}
+                          <BiSolidLike className="text-blue-500 text-sm" /> {lesson.likeCount || 0}
                         </span>
                         <span className="text-[#223753]">|</span>
                         <span className="flex items-center gap-1" title="Saved count">
-                          <IoSave className="text-purple-500 text-sm" /> {lesson.savedThisLessonCount || 0}
+                          <IoSave className="text-purple-500 text-sm" /> {lesson.saveCount || 0}
                         </span>
                       </div>
                     </td>

@@ -30,7 +30,7 @@ export default function SidebarDashboard() {
   const { data: session } = authClient.useSession()
   const user = session?.user
 
-  // ন্যাভবারের হ্যামবার্গার ক্লিকের সাথে সিঙ্ক করা
+
   useEffect(() => {
     const handleToggle = (e) => setOpen(e.detail)
     window.addEventListener('toggle-sidebar', handleToggle)
@@ -42,7 +42,6 @@ export default function SidebarDashboard() {
       { icon: FiHome, href: '/dashboard/user', label: 'Dashboard' },
       { icon: AddIcon, href: '/dashboard/user/add-lesson', label: 'Add Lesson' },
       { icon: MdOutlineLibraryBooks, href: '/dashboard/user/my-lessons', label: 'My Lessons' },
-      { icon: RiEdit2Line, href: '/dashboard/user/update-lesson', label: 'Update Lesson' },
       { icon: FiHeart, href: '/dashboard/user/my-favorites', label: 'My Favourites' },
       { icon: FiUser, href: '/profile', label: 'Profile' },
     ],

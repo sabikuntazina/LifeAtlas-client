@@ -6,7 +6,7 @@ export default function Home() {
   return (
   <div>
     <HeroSlider></HeroSlider>
-    {/* <FeaturedLessons></FeaturedLessons> */}
+    <FeaturedLessons></FeaturedLessons>
   </div>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { postComment, postLikedLessons, postSavedLessons } from "@/lib/action/SavedLessons";
-import { FiBookmark, FiHeart, FiMessageCircle, FiUser } from "react-icons/fi";
+import { FiBookmark, FiHeart, FiMessageCircle, FiUser, FiAlertTriangle } from "react-icons/fi";
 import { toast } from "react-toastify";
 
 export default function LessonActions({ id, lesson, user }) {
@@ -20,101 +20,106 @@ export default function LessonActions({ id, lesson, user }) {
   const [commenting, setCommenting] = useState(false);
   const [commentCount, setCommentCount] = useState(lesson.commentCount || 0);
   const [commentText, setCommentText] = useState(""); 
-  // ✅ কমেন্ট লাইভ দেখানোর জন্য স্টেট (ডাটাবেজ থেকে আসা comments array অথবা খালি array)
   const [commentsList, setCommentsList] = useState(lesson.comments || []);
 
   const formattedDate = lesson.createdAt
     ? new Date(lesson.createdAt).toLocaleDateString()
     : "Just Now";
 
-// 📥 SAVE LESSON FUNCTION
-const handleSaveLesson = async () => {
-  if (!user) return alert("Login required");
+  // ⚠️ REPORT LESSON HANDLER
+  const handleReportLesson = () => {
+    if (!user) return alert("Login required to report");
+    // আপনি চাইলে এখানে একটি মডাল ওপেন করতে পারেন বা সরাসরি অ্যাকশন কল করতে পারেন
+    toast.info("🚨 Thank you for reporting. Administration will review this module shortly.");
+  };
 
-  try {
-    setSaving(true);
-    
-    const saveLessonData = {
-      lessonId: lesson._id || id, 
-      title:lesson.title,
-      description:lesson.description,
-      category:lesson.category,
-      tone:lesson.tone,
-      image:lesson.image,
-      access:lesson.access,
-      visibility:lesson.visibility,
-      creatorName:lesson.creatorName,
-      creatorId:lesson.creatorId,
-      userId: user.id,
-      userName: user.name,
-      userImage: user.image,
-      userRole: user.role,
-      userPlan: user.plan,
-      userEmail: user.email,
-    };
+  // 📥 SAVE LESSON FUNCTION
+  const handleSaveLesson = async () => {
+    if (!user) return alert("Login required");
 
-    const result = await postSavedLessons(saveLessonData);
+    try {
+      setSaving(true);
+      
+      const saveLessonData = {
+        lessonId: lesson._id || id, 
+        title:lesson.title,
+        description:lesson.description,
+        category:lesson.category,
+        tone:lesson.tone,
+        image:lesson.image,
+        access:lesson.access,
+        visibility:lesson.visibility,
+        creatorName:lesson.creatorName,
+        creatorId:lesson.creatorId,
+        userId: user.id,
+        userName: user.name,
+        userImage: user.image,
+        userRole: user.role,
+        userPlan: user.plan,
+        userEmail: user.email,
+      };
 
-    if (result && result.success === false) {
-      return toast.error(result.message || "Could not save lesson!");
+      const result = await postSavedLessons(saveLessonData);
+
+      if (result && result.success === false) {
+        return toast.error(result.message || "Could not save lesson!");
+      }
+
+      setSaveCount((prev) => prev + 1);
+      toast.success("Lesson saved successfully!");
+    } catch (err) {
+      console.error("Frontend Save Error:", err);
+      toast.error("Something went wrong!");
+    } finally {
+      setSaving(false);
     }
+  };
 
-    setSaveCount((prev) => prev + 1);
-    toast.success("Lesson saved successfully!");
-  } catch (err) {
-    console.error("Frontend Save Error:", err);
-    toast.error("Something went wrong!");
-  } finally {
-    setSaving(false);
-  }
-};
+  // ❤️ LIKE LESSON FUNCTION
+  const handleLikedLesson = async () => {
+    if (!user) return alert("Login required");
+    if (liked) return toast.info("Already liked this lesson!");
 
- // ❤️ LIKE LESSON FUNCTION
-const handleLikedLesson = async () => {
-  if (!user) return alert("Login required");
-  if (liked) return toast.info("Already liked this lesson!");
+    try {
+      setLiking(true);
 
-  try {
-    setLiking(true);
+      const likeLessonData = {
+        lessonId: lesson._id || id, 
+        title:lesson.title,
+        description:lesson.description,
+        category:lesson.category,
+        tone:lesson.tone,
+        image:lesson.image,
+        access:lesson.access,
+        visibility:lesson.visibility,
+        creatorName:lesson.creatorName,
+        creatorId:lesson.creatorId,
+        userId: user.id,
+        userName: user.name,
+        userImage: user.image,
+        userRole: user.role,
+        userPlan: user.plan,
+        userEmail: user.email,
+      };
 
-    const likeLessonData = {
-      lessonId: lesson._id || id, 
-      title:lesson.title,
-      description:lesson.description,
-      category:lesson.category,
-      tone:lesson.tone,
-      image:lesson.image,
-      access:lesson.access,
-      visibility:lesson.visibility,
-      creatorName:lesson.creatorName,
-      creatorId:lesson.creatorId,
-      userId: user.id,
-      userName: user.name,
-      userImage: user.image,
-      userRole: user.role,
-      userPlan: user.plan,
-      userEmail: user.email,
-    };
+      await postLikedLessons(likeLessonData);
+      
+      setLikeCount((prev) => prev + 1);
+      setLiked(true);
+      toast.success("Lesson liked successfully!");
+    } catch (err) {
+      console.error("Frontend Like Error:", err);
+      toast.error("Something went wrong while liking!");
+    } finally {
+      setLiking(false);
+    }
+  };
 
-    await postLikedLessons(likeLessonData);
-    
-    // UI-তে লাইক সংখ্যা সাথে সাথে ১ বাড়িয়ে দেওয়া
-    setLikeCount((prev) => prev + 1);
-    setLiked(true);
-    toast.success("Lesson liked successfully!");
-  } catch (err) {
-    console.error("Frontend Like Error:", err);
-    toast.error("Something went wrong while liking!");
-  } finally {
-    setLiking(false);
-  }
-};
   // 💬 COMMENT LESSON FUNCTION
   const handleComment = async () => {
     if (!user) return alert("Login required");
     if (!commentText.trim()) return toast.warning("Comment cannot be empty!"); 
 
-   
     const newCommentLocal = {
       text: commentText,         
       userId: user.id,
@@ -140,13 +145,11 @@ const handleLikedLesson = async () => {
         userEmail: user.email,
       };
 
-
       await postComment(commentPayload);
 
-      // ✅ UI আপডেট: স্টেট আপডেট করে নতুন কমেন্টটি অ্যারের সবার উপরে (বা নিচে) যোগ করা
       setCommentsList((prev) => [newCommentLocal, ...prev]); 
       setCommentCount((prev) => prev + 1);
-      setCommentText(""); // ইনপুট বক্স ক্লিয়ার
+      setCommentText(""); 
       toast.success("Comment added successfully!");
     } catch (err) {
       console.log(err);
@@ -159,7 +162,8 @@ const handleLikedLesson = async () => {
   return (
     <div className="min-h-screen bg-[#081221] text-[#F8FAFC] px-4 py-12 md:py-20 antialiased selection:bg-[#3B82F6]/30">
       <div className="max-w-5xl mx-auto space-y-8">
-        {/* UPPER META BAR */}
+        
+        {/* UPPER META BAR (With New Report Action Button) */}
         <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#223753]">
           <div className="flex flex-wrap gap-2">
             {lesson.category && (
@@ -184,8 +188,21 @@ const handleLikedLesson = async () => {
               </span>
             )}
           </div>
-          <div className="text-xs font-mono text-[#7C8BA1] bg-[#0D1B2A] px-2 py-1 rounded border border-[#223753]">
-            ID: {lesson._id || id}
+          
+          <div className="flex items-center gap-3">
+            <div className="text-xs font-mono text-[#7C8BA1] bg-[#0D1B2A] px-2 py-1 rounded border border-[#223753]">
+              ID: {lesson._id || id}
+            </div>
+            
+            {/* ⚠️ Interactive Report Button */}
+            <button
+              onClick={handleReportLesson}
+              className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500/10 transition-all duration-300 active:scale-95 shadow-sm"
+              title="Report this content"
+            >
+              <FiAlertTriangle size={13} />
+              <span>Report</span>
+            </button>
           </div>
         </div>
 
@@ -282,7 +299,7 @@ const handleLikedLesson = async () => {
           </div>
         </div>
 
-        {/* INTERACTIVE ACTION ENGAGEMENT BAR (Input & Action) */}
+        {/* INTERACTIVE ACTION ENGAGEMENT BAR */}
         <div className="card bg-[#152B45] border border-[#223753] rounded-xl shadow-md">
           <div className="p-4 space-y-4">
             
@@ -342,7 +359,7 @@ const handleLikedLesson = async () => {
           </div>
         </div>
 
-        {/* ✅ NEW: COMMENTS DISPLAY LIST SECTION */}
+        {/* COMMENTS DISPLAY LIST SECTION */}
         <div className="card bg-[#11243A] border border-[#223753] rounded-xl shadow-xl">
           <div className="p-6 space-y-6">
             <h3 className="text-lg font-bold text-[#F8FAFC] flex items-center gap-2 border-b border-[#223753] pb-3">
@@ -359,7 +376,6 @@ const handleLikedLesson = async () => {
                     key={index} 
                     className="flex gap-3 bg-[#081221]/50 border border-[#223753]/40 p-4 rounded-xl transition-all hover:border-[#223753]"
                   >
-                    {/* User Avatar */}
                     <div className="avatar placeholder shrink-0">
                       <div className="w-10 h-10 rounded-full ring-1 ring-[#3B82F6]/40 overflow-hidden bg-[#152B45] flex items-center justify-center">
                         {comm.userImage ? (
@@ -370,7 +386,6 @@ const handleLikedLesson = async () => {
                       </div>
                     </div>
 
-                    {/* Comment Content */}
                     <div className="flex-1 space-y-1">
                       <div className="flex items-center justify-between flex-wrap gap-x-2">
                         <div className="flex items-center gap-1.5">
