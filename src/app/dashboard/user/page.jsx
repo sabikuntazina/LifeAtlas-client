@@ -22,7 +22,7 @@ import {
 } from 'recharts';
 import { authHeader, getServerSession } from '@/lib/core/session';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
+const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000";
 
 export default function UserDashboardPage() {
   const [dashboardData, setDashboardData] = useState({
@@ -36,14 +36,12 @@ export default function UserDashboardPage() {
   useEffect(() => {
     const getUserMetrics = async () => {
       try {
-        // 🔒 ক্লাইন্ট সাইড থেকে সেশন সিকিউরলি পাওয়ার জন্য নেক্সট-অথ বা আপনার প্রোজেক্টের সেশন রুট কল
+       
         const user= await getServerSession()
         
-        // সেশন থেকে সেফলি আইডি এবং ইমেইল রিড করা হচ্ছে
         const userId =user?.id || "";
         const email =user?.email || ""; 
 
-        // 🚀 এপিআই এন্ডপয়েন্টে রিয়াল ডেটা রিকোয়েস্ট পাঠানো হচ্ছে
         const res = await fetch(`${BASE_URL}/api/user/dashboard-summary?userId=${userId}&email=${email}`,
             {
         headers: await authHeader()
