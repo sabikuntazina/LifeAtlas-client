@@ -5,7 +5,7 @@ import { FiAward, FiBookOpen, FiUser, FiArrowRight } from "react-icons/fi";
 import Link from "next/link";
 import { authHeader } from "@/lib/core/session";
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
+const BASE_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:5000";
 
 export default function TopContributors() {
   const [contributors, setContributors] = useState([]);
