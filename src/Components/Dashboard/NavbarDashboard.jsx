@@ -7,7 +7,7 @@ import React from 'react'
 import { authClient } from '@/lib/auth-client'
 import NavLink from '../NavLink'
 import { FaCrown } from 'react-icons/fa'
-import { FiMenu } from 'react-icons/fi' // 👈 হ্যামবার্গার আইকন আবার আনা হলো
+import { FiMenu } from 'react-icons/fi' 
 
 const NavbarDashboard = () => {
   const { data: session } = authClient.useSession()
@@ -33,7 +33,7 @@ const NavbarDashboard = () => {
     admin: '/dashboard/admin'
   }
 
-  // মোবাইল সাইডবার খোলার জন্য কাস্টম ইভেন্ট ট্রিগার
+
   const openMobileSidebar = () => {
     const event = new CustomEvent('toggle-sidebar', { detail: true })
     window.dispatchEvent(event)
@@ -56,21 +56,21 @@ const NavbarDashboard = () => {
           </h2>
         </div>
 
-        {/* 💻 DESKTOP LEFT: NAVIGATION LINKS (মোবাইলে একদম হাইড থাকবে) */}
+        {/* 💻 DESKTOP LEFT: NAVIGATION LINKS */}
         <div className="hidden lg:flex">
-          <ul className="menu menu-horizontal text-sm font-semibold gap-2 p-0">
+          <ul className="menu menu-horizontal text-base font-semibold gap-4 p-0">
             <NavLink href="/"><li>Home</li></NavLink>
             <NavLink href="/alllessons"><li>All Lessons</li></NavLink>
             {user && !isAdmin && (
               <>
-                <NavLink href="/dashboard/add-lesson"><li>Add Lesson</li></NavLink>
-                <NavLink href="/dashboard/my-lessons"><li>My Lessons</li></NavLink>
+                <NavLink href="/dashboard/user/add-lesson"><li>Add Lesson</li></NavLink>
+                <NavLink href="/dashboard/user/my-lessons"><li>My Lessons</li></NavLink>
               </>
             )}
           </ul>
         </div>
 
-        {/* 🔒 RIGHT: USER PROFILE & ACTIONS (সব স্ক্রিনেই একদম ডানপাশে থাকবে) */}
+        {/* 🔒 RIGHT: USER PROFILE & ACTIONS */}
         <div className="flex-none flex items-center gap-2 sm:gap-3">
           
           {!user ? (

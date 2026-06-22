@@ -53,7 +53,7 @@ export default function NotFound() {
             href="/"
             className="w-full py-3 px-5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white text-xs font-medium tracking-wider uppercase transition-all duration-300 text-center shadow-md shadow-blue-900/20"
           >
-            Dashboard
+            Home
           </Link>
           
         </div>

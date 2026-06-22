@@ -88,14 +88,14 @@ export default async function Success({ searchParams }) {
             <div className="card-actions justify-center mt-8 gap-4">
 
               <Link
-                href="/dashboard"
+                href="/"
                 className="btn bg-[#2563EB] hover:bg-[#3B82F6] border-none text-white"
               >
-                Go To Dashboard
+                Go To Home
               </Link>
 
               <Link
-                href="/public-lessons"
+                href="/alllessons"
                 className="btn btn-outline border-[#3B82F6] text-[#3B82F6]"
               >
                 Explore Lessons

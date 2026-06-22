@@ -36,18 +36,18 @@ const Navbar = () => {
   }
 
   const dashboardLinks = {
-    user: '/dashboard/user', // 👈 রুট ডিরেক্টরি পাথ ফিক্স করা হলো
+    user: '/dashboard/user', 
     admin: '/dashboard/admin'
   }
 
-  // রেন্ডারিং সহজ করতে এবং কোড ডুপ্লিকেশন কমাতে লিঙ্কগুলোর সাধারণ ফাংশন
+
   const renderNavLinks = () => (
     <>
       <NavLink href="/"><li>Home</li></NavLink>
       <NavLink href="/alllessons"><li>All Lessons</li></NavLink>
       {user && !isAdmin && (
         <>
-          <NavLink href="/dashboard/add-lesson"><li>Add Lesson</li></NavLink>
+          <NavLink href="/dashboard/user/add-lesson"><li>Add Lesson</li></NavLink>
           <NavLink href="/dashboard/user/my-lessons"><li>My Lessons</li></NavLink>
         </>
       )}
