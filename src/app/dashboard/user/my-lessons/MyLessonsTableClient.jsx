@@ -185,11 +185,11 @@ export default function MyLessonsTableClient({ initialLessons = [], user }) {
                   {/* Likes & Saves */}
                   <div className="flex items-center gap-3 text-xs text-[#B8C4D6] bg-[#081221] px-2.5 py-1 rounded-lg border border-[#223753]">
                     <span className="flex items-center gap-1">
-                      <BiSolidLike className="text-blue-400" /> {lesson.liked || 0}
+                      <BiSolidLike className="text-blue-400" /> {lesson.likeCount || 0}
                     </span>
                     <span className="text-[#223753]">|</span>
                     <span className="flex items-center gap-1">
-                      <IoSave className="text-purple-400" /> {lesson.savedThisLessonCount || 0}
+                      <IoSave className="text-purple-400" /> {lesson.saveCount || 0}
                     </span>
                   </div>
 

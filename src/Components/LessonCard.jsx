@@ -4,14 +4,22 @@ import Link from "next/link";
 import { FiLock, FiCalendar, FiArrowRight, FiAward, FiSmile } from "react-icons/fi";
 
 export default function LessonCard({ lesson, user }) {
+  // 🔒 ১. প্রাইভেসি গার্ড: লেসন প্রাইভেট হলে কম্পোনেন্ট কিছুই রেন্ডার করবে না
+  if (lesson?.visibility === "private") {
+    return null;
+  }
+
   const isPremiumUser = user?.plan === "premium";
 
-  // 🛠️ আপনার আগের লজিক ও প্রোপার্টি নেম ঠিক রাখা হয়েছে
+  // 🛠️ প্রিমিয়াম লক লজিক
   const isLocked = lesson.access === "premium" && !isPremiumUser;
 
   const createdDate = lesson.createdAt
     ? new Date(lesson.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
     : 'Recent';
+
+  // আপনার প্রোভাইড করা ডেটা স্কিমা অনুযায়ী ম্যাপ করা হয়েছে (creatorName)
+  const authorName = lesson.creatorName || 'Anonymous';
 
   return (
     <div className="group relative h-full rounded-2xl border border-[#223753]/60 bg-gradient-to-b from-[#11243A] to-[#081221] p-6 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:shadow-blue-500/5 hover:-translate-y-1.5 transition-all duration-500 overflow-hidden">
@@ -19,7 +27,7 @@ export default function LessonCard({ lesson, user }) {
       {/* ✨ BACKGROUND HOVER GLOW EFFECT */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#3B82F6]/0 via-[#3B82F6]/5 to-[#3B82F6]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-      {/* 🔒 PREMIUM LOCK OVERLAY (INTEGRATED SMARTLY) */}
+      {/* 🔒 PREMIUM LOCK OVERLAY */}
       {isLocked && (
         <div className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-[#081221]/85 backdrop-blur-md rounded-2xl text-center p-6 transition-all duration-300">
           <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-full mb-4 text-[#3B82F6] shadow-inner shadow-blue-500/5 animate-pulse">
@@ -91,15 +99,24 @@ export default function LessonCard({ lesson, user }) {
             </span>
           </div>
 
-          {/* User/Author Node */}
+          {/* User/Author Node (Fixed Property Binding) */}
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#2563EB] to-indigo-600 flex items-center justify-center text-xs font-black text-white uppercase shadow-md shadow-blue-500/5">
-              {lesson.userName?.[0] || 'U'}
-            </div>
+            {lesson.creatorImg ? (
+              <img 
+                src={lesson.creatorImg} 
+                alt={authorName}
+                className="w-8 h-8 rounded-full border border-[#223753] object-cover"
+                onError={(e) => { e.target.style.display = 'none'; }} // ইমেজ লিংকে এরর থাকলে ফলব্যাক লেটার দেখাবে
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#2563EB] to-indigo-600 flex items-center justify-center text-xs font-black text-white uppercase shadow-md shadow-blue-500/5">
+                {authorName[0]}
+              </div>
+            )}
             <div className="flex flex-col">
               <span className="text-xs text-[#7C8BA1]">Contributed by</span>
               <span className="text-xs font-bold text-[#F8FAFC] truncate max-w-[150px]">
-                {lesson.userName || 'Anonymous'}
+                {authorName}
               </span>
             </div>
           </div>

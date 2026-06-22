@@ -4,6 +4,9 @@ import { useState } from "react";
 import { postComment, postLikedLessons, postSavedLessons } from "@/lib/action/SavedLessons";
 import { FiBookmark, FiHeart, FiMessageCircle, FiUser, FiAlertTriangle } from "react-icons/fi";
 import { toast } from "react-toastify";
+import { postReportLesson } from "@/lib/adminFunctions/reportLesson";
+import ReportLessonModal from "./ReportLessonModal";
+
 
 export default function LessonActions({ id, lesson, user }) {
   console.log("Latest lesson", lesson);
@@ -22,15 +25,33 @@ export default function LessonActions({ id, lesson, user }) {
   const [commentText, setCommentText] = useState(""); 
   const [commentsList, setCommentsList] = useState(lesson.comments || []);
 
+  // 🚨 Report Modal States
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isReporting, setIsReporting] = useState(false);
+
   const formattedDate = lesson.createdAt
     ? new Date(lesson.createdAt).toLocaleDateString()
     : "Just Now";
 
-  // ⚠️ REPORT LESSON HANDLER
-  const handleReportLesson = () => {
+  // ⚠️ REPORT BUTTON CLICK HANDLER
+  const handleReportClick = () => {
     if (!user) return alert("Login required to report");
-    // আপনি চাইলে এখানে একটি মডাল ওপেন করতে পারেন বা সরাসরি অ্যাকশন কল করতে পারেন
-    toast.info("🚨 Thank you for reporting. Administration will review this module shortly.");
+    setIsModalOpen(true); // মডালটি ওপেন করবে
+  };
+
+  // ✅ CONFIRM REPORT FUNCTION (মডালের ভেতর থেকে কল হবে)
+  const handleConfirmReport = async () => {
+    try {
+      setIsReporting(true);
+      await postReportLesson(lesson);
+      toast.success("🚨 Thank you for reporting. Administration will review this module shortly.");
+      setIsModalOpen(false); // কাজ শেষে মডাল ক্লোজ হবে
+    } catch (err) {
+      console.error("Reporting Error:", err);
+      toast.error("Something went wrong while reporting!");
+    } finally {
+      setIsReporting(false);
+    }
   };
 
   // 📥 SAVE LESSON FUNCTION
@@ -163,7 +184,7 @@ export default function LessonActions({ id, lesson, user }) {
     <div className="min-h-screen bg-[#081221] text-[#F8FAFC] px-4 py-12 md:py-20 antialiased selection:bg-[#3B82F6]/30">
       <div className="max-w-5xl mx-auto space-y-8">
         
-        {/* UPPER META BAR (With New Report Action Button) */}
+        {/* UPPER META BAR */}
         <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-[#223753]">
           <div className="flex flex-wrap gap-2">
             {lesson.category && (
@@ -196,7 +217,7 @@ export default function LessonActions({ id, lesson, user }) {
             
             {/* ⚠️ Interactive Report Button */}
             <button
-              onClick={handleReportLesson}
+              onClick={handleReportClick}
               className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg border border-red-500/30 bg-red-500/5 text-red-400 hover:bg-red-500/10 transition-all duration-300 active:scale-95 shadow-sm"
               title="Report this content"
             >
@@ -408,6 +429,14 @@ export default function LessonActions({ id, lesson, user }) {
         </div>
 
       </div>
+
+      {/* 📥 REPORT CONFIRMATION MODAL INJECTION */}
+      <ReportLessonModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmReport}
+        isReporting={isReporting}
+      />
     </div>
   );
 }
