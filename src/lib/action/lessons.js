@@ -13,11 +13,15 @@ export const getAllLessons = async () => {
 /* ---------------------------------------
    GET MY LESSONS (Dashboard Table)
 ----------------------------------------*/
-export const getMyLessons = async (creatorId) => {
+export const getMyLessons = async (creatorId,page) => {
+    if(!page){
+    page=1
+  }
   
-  const res = await fetch(`${BASE_URL}/lessons/my/${creatorId}`,
+  const res = await fetch(`${BASE_URL}/lessons/my/${creatorId}?page=${page}`,
     {
       headers: await authHeader(),
+      cache: 'no-store'
     }
   );
   console.log("Data in response", res)

@@ -4,11 +4,27 @@ import { authHeader } from "../core/session";
 
 const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL;
 
+export const getAllLessons = async (queryParams) => {
+  const page = queryParams?.page || 1;
+  const search = queryParams?.search || "";
+  const category = queryParams?.category || "";
+  const tone = queryParams?.tone || "";
+  const sortBy = queryParams?.sortBy || "newest";
 
-export const getAllLessons = async () => {
-  const res = await fetch(`${baseUrl}/lessons/all`);
-  const lessonData = await res.json();
-  return lessonData;
+  // URLSearchParams ব্যবহার করে ক্লিন কুয়েরি স্ট্রিং তৈরি
+  const stringParams = new URLSearchParams({
+    page: String(page),
+    search,
+    category,
+    tone,
+    sortBy
+  });
+
+  const res = await fetch(`${baseUrl}/lessons/all?${stringParams.toString()}`, {
+    cache: 'no-store' // 🎯 কন্টিনিউয়াস লাইভ ডেটা ফিল্টারিং ট্র্যাকিংয়ের জন্য ক্যাশ বন্ধ করা হলো
+  });
+  
+  return res.json();
 };
 //done
 export const getLessonById = async (id) => {

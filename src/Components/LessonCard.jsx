@@ -5,9 +5,10 @@ import { useRouter } from "next/navigation"; // 👈 নতুন ইমপো�
 import { FiLock, FiCalendar, FiArrowRight, FiAward, FiSmile } from "react-icons/fi";
 
 export default function LessonCard({ lesson, user }) {
-  const router = useRouter(); // 👈 রাউটার ইনিশিয়েলাইজ করা হলো
+  const router = useRouter(); 
 
-  // 🔒 ১. প্রাইভেসি গার্ড: লেসন প্রাইভেট হলে কম্পোনেন্ট কিছুই রেন্ডার করবে না
+  
+
   if (lesson?.visibility === "private") {
     return null;
   }
