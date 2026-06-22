@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { 
-  FiCalendar, FiTrash2, FiStar, FiFilter, FiChevronDown, FiBookOpen, FiDollarSign 
+  FiCalendar, FiTrash2, FiStar, FiFilter, FiChevronDown, FiBookOpen, FiDollarSign, FiSearch, FiX 
 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
@@ -19,7 +19,8 @@ export default function ManageLessonsTable({ initialLessons }) {
   const [selectedLessonToFeatured, setSelectedLessonToFeatured] = useState(null);
   const [selectedLessonToDelete, setSelectedLessonToDelete] = useState(null);
   
-  // 🔍 Filter States (Flags Filter removed)
+  // 🔍 Filter States
+  const [searchQuery, setSearchQuery] = useState(''); // 👈 নতুন সার্চ কুয়েরি স্টেট
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [visibilityFilter, setVisibilityFilter] = useState('all');
   const [accessFilter, setAccessFilter] = useState('all');
@@ -29,9 +30,13 @@ export default function ManageLessonsTable({ initialLessons }) {
     return ['all', ...new Set(allCats)];
   }, [initialLessons]);
 
-  // 🛠️ ফিল্টারিং লজিক (Flags বাদে)
+  // 🛠️ ফিল্টারিং লজিক (সার্চ কুয়েরিসহ কম্বাইন্ড)
   const filteredLessons = useMemo(() => {
     return lessons.filter((lesson) => {
+      // ০. সার্চ ফিল্টার (টাইটেল ম্যাচিং - কেস সেনসিটিভ ছাড়া)
+      const lessonTitle = lesson.title ? lesson.title.toLowerCase() : '';
+      const matchSearch = lessonTitle.includes(searchQuery.toLowerCase());
+
       // ১. ক্যাটাগরি ফিল্টার
       const matchCategory = categoryFilter === 'all' || lesson.category === categoryFilter;
       
@@ -43,9 +48,10 @@ export default function ManageLessonsTable({ initialLessons }) {
       const currentAccess = lesson.access || 'free';
       const matchAccess = accessFilter === 'all' || currentAccess === accessFilter;
 
-      return matchCategory && matchVisibility && matchAccess;
+      // সবগুলো কন্ডিশন একসাথে ট্রু হলে তবেই ডেটা দেখাবে
+      return matchSearch && matchCategory && matchVisibility && matchAccess;
     });
-  }, [lessons, categoryFilter, visibilityFilter, accessFilter]);
+  }, [lessons, searchQuery, categoryFilter, visibilityFilter, accessFilter]);
 
   // 🔥 Confirm Featured Function
   const handleConfirmFeatured = async () => {
@@ -94,15 +100,39 @@ export default function ManageLessonsTable({ initialLessons }) {
   return (
     <div className="space-y-8">
       
-      {/* 🎛️ FILTERS CONTROL BAR (Grid adjusted to 3 columns) */}
+      {/* 🎛️ FILTERS CONTROL BAR WITH SEARCH INCLUDED */}
       <div className="relative bg-gradient-to-r from-[#11243A] to-[#0E1E31] border border-[#223753]/80 p-6 rounded-2xl shadow-xl backdrop-blur-md">
         <div className="absolute top-0 left-6 -translate-y-1/2 bg-[#2563EB] text-sm font-bold uppercase tracking-widest text-white px-5 py-2 rounded-full shadow-lg shadow-blue-500/20 flex items-center gap-2">
-          <FiFilter size={14} /> Live Filters
+          <FiFilter size={14} /> Live Matrix Control
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
-          {/* Category Filter */}
-          <div className="space-y-2">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mt-4">
+          
+          {/* 🔍 Dynamic Search Bar Component (Spans 4 columns on large screens) */}
+          <div className="md:col-span-12 lg:col-span-4 space-y-2">
+            <label className="text-xs sm:text-sm text-[#94A3B8] font-bold uppercase tracking-wider block">Search Lesson</label>
+            <div className="relative group">
+              <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-[#64748B] group-focus-within:text-[#3B82F6] transition-colors" size={18} />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Type lesson title to scan..."
+                className="w-full bg-[#091524] border border-[#223753] text-base font-semibold text-[#CBD5E1] placeholder-[#475569] rounded-xl pl-11 pr-10 py-3.5 outline-none transition-all duration-300 focus:border-[#3B82F6] focus:ring-4 focus:ring-[#3B82F6]/10 group-hover:border-[#2E486D]"
+              />
+              {searchQuery && (
+                <button 
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-white transition-colors"
+                >
+                  <FiX size={16} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Category Filter (Spans 3 columns) */}
+          <div className="md:col-span-4 lg:col-span-3 space-y-2">
             <label className="text-xs sm:text-sm text-[#94A3B8] font-bold uppercase tracking-wider block">Category Block</label>
             <div className="relative group">
               <select
@@ -118,8 +148,8 @@ export default function ManageLessonsTable({ initialLessons }) {
             </div>
           </div>
 
-          {/* Visibility Filter */}
-          <div className="space-y-2">
+          {/* Visibility Filter (Spans 3 columns) */}
+          <div className="md:col-span-4 lg:col-span-3 space-y-2">
             <label className="text-xs sm:text-sm text-[#94A3B8] font-bold uppercase tracking-wider block">Visibility Status</label>
             <div className="relative group">
               <select
@@ -135,8 +165,8 @@ export default function ManageLessonsTable({ initialLessons }) {
             </div>
           </div>
 
-          {/* Access Type Filter */}
-          <div className="space-y-2">
+          {/* Access Type Filter (Spans 2 columns) */}
+          <div className="md:col-span-4 lg:col-span-2 space-y-2">
             <label className="text-xs sm:text-sm text-[#94A3B8] font-bold uppercase tracking-wider block">Access Pricing</label>
             <div className="relative group">
               <select
@@ -144,13 +174,14 @@ export default function ManageLessonsTable({ initialLessons }) {
                 onChange={(e) => setAccessFilter(e.target.value)}
                 className="appearance-none w-full bg-[#091524] border border-[#223753] text-base font-semibold text-[#CBD5E1] rounded-xl pl-4 pr-10 py-3.5 cursor-pointer outline-none transition-all duration-300 focus:border-[#3B82F6] focus:ring-4 focus:ring-[#3B82F6]/10 group-hover:border-[#2E486D]"
               >
-                <option value="all" className="bg-[#0D1B2A]">💎 All Access Types</option>
-                <option value="free" className="bg-[#0D1B2A] text-cyan-400">🎁 Free Content</option>
-                <option value="premium" className="bg-[#0D1B2A] text-yellow-400 font-bold">👑 Premium Content</option>
+                <option value="all" className="bg-[#0D1B2A]">💎 All Access</option>
+                <option value="free" className="bg-[#0D1B2A] text-cyan-400">🎁 Free</option>
+                <option value="premium" className="bg-[#0D1B2A] text-yellow-400 font-bold">👑 Premium</option>
               </select>
               <FiChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#64748B] pointer-events-none" />
             </div>
           </div>
+
         </div>
       </div>
 
@@ -290,6 +321,7 @@ export default function ManageLessonsTable({ initialLessons }) {
         onConfirm={handleConfirmFeatured} 
       />
 
+      {/* Clear/Cross icon import fixes React-Icons dependency safety inside parent stack */}
       <DeleteModal 
         lesson={selectedLessonToDelete}
         onClose={() => setSelectedLessonToDelete(null)}

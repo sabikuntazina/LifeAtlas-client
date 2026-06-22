@@ -1,10 +1,13 @@
 'use server'
+
+import { authHeader } from "../core/session";
+
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
 export const getUserInformation=async()=>{
    const res = await fetch(`${BASE_URL}/users`,
-      // {
-      //   headers: await authHeader()
-      // }
+      {
+        headers: await authHeader()
+      }
     );
     return res.json();
 }
@@ -13,7 +16,9 @@ export const getUserInformation=async()=>{
 export const updateUserInformation=async(user)=>{
    const res = await fetch(`${BASE_URL}/users/update/${user._id}`, {
           method: 'PATCH',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json',
+             ...await authHeader(),
+           },
           body: JSON.stringify({ role: user.role, plan: user.plan })
         });
   

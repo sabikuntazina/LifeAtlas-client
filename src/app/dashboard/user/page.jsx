@@ -20,7 +20,7 @@ import {
   Tooltip, 
   ResponsiveContainer 
 } from 'recharts';
-import { getServerSession } from '@/lib/core/session';
+import { authHeader, getServerSession } from '@/lib/core/session';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
 
@@ -44,7 +44,11 @@ export default function UserDashboardPage() {
         const email =user?.email || ""; 
 
         // 🚀 এপিআই এন্ডপয়েন্টে রিয়াল ডেটা রিকোয়েস্ট পাঠানো হচ্ছে
-        const res = await fetch(`${BASE_URL}/api/user/dashboard-summary?userId=${userId}&email=${email}`);
+        const res = await fetch(`${BASE_URL}/api/user/dashboard-summary?userId=${userId}&email=${email}`,
+            {
+        headers: await authHeader()
+      }
+        );
         const data = await res.json();
 
         if (data.success) {

@@ -8,7 +8,7 @@ export const postReportLesson=async(reportLessonData)=>{
       method: 'POST',
       headers: {
         'Content-type' : 'application/json',
-        // ...await authHeader(),
+        ...await authHeader(),
       },
        body : JSON.stringify(reportLessonData)
     })
@@ -19,9 +19,9 @@ export const postReportLesson=async(reportLessonData)=>{
 
 export const getAllReportedLessons=async()=>{
    const res = await fetch(`${BASE_URL}/report/lesson`,
-      // {
-      //   headers: await authHeader()
-      // }
+      {
+        headers: await authHeader()
+      }
     );
     return res.json();
 }
@@ -29,7 +29,7 @@ export const getAllReportedLessons=async()=>{
 export const deleteReportedLessonPermanently = async (id) => {
   const res = await fetch(`${BASE_URL}/report/lessons/delete/permanently/${id}`, {
     method: "DELETE",
-    // headers:await authHeader(),
+    headers:await authHeader(),
   });
 
   return res.json();
@@ -41,7 +41,7 @@ export const deleteReportedLessonPermanently = async (id) => {
 export const deleteReportedLessonToIgnore = async (id) => {
   const res = await fetch(`${BASE_URL}/report/lessons/delete/ignore/${id}`, {
     method: "DELETE",
-    // headers:await authHeader(),
+    headers:await authHeader(),
   });
 
   return res.json();

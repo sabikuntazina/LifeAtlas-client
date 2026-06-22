@@ -21,6 +21,7 @@ import {
 } from 'recharts';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
+import { authHeader } from '@/lib/core/session';
 
 export default function AdminDashboardPage() {
 
@@ -38,7 +39,11 @@ export default function AdminDashboardPage() {
     const getDashboardMetrics = async () => {
       try {
     
-        const res = await fetch(`${BASE_URL}/api/admin/dashboard-summary`);
+        const res = await fetch(`${BASE_URL}/api/admin/dashboard-summary`,
+            {
+        headers: await authHeader()
+      }
+        );
         const data = await res.json();
         console.log(data)
 

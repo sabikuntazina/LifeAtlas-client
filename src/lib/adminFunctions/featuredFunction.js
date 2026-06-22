@@ -1,4 +1,7 @@
 'use server'
+
+import { authHeader } from "../core/session";
+
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:5000";
 
 //to Store the comment 
@@ -7,7 +10,7 @@ export const postFeaturedLesson=async(featuredLessonData)=>{
       method: 'POST',
       headers: {
         'Content-type' : 'application/json',
-        // ...await authHeader(),
+        ...await authHeader(),
       },
        body : JSON.stringify(featuredLessonData)
     })
@@ -19,9 +22,7 @@ export const postFeaturedLesson=async(featuredLessonData)=>{
 
 export const getAllFeaturedLessons=async()=>{
    const res = await fetch(`${BASE_URL}/featured/lessons`,
-      // {
-      //   headers: await authHeader()
-      // }
+    
     );
     return res.json();
 }
