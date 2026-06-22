@@ -11,7 +11,7 @@ export const getAllLessons = async (queryParams) => {
   const tone = queryParams?.tone || "";
   const sortBy = queryParams?.sortBy || "newest";
 
-  // URLSearchParams ব্যবহার করে ক্লিন কুয়েরি স্ট্রিং তৈরি
+
   const stringParams = new URLSearchParams({
     page: String(page),
     search,
@@ -21,7 +21,7 @@ export const getAllLessons = async (queryParams) => {
   });
 
   const res = await fetch(`${baseUrl}/lessons/all?${stringParams.toString()}`, {
-    cache: 'no-store' // 🎯 কন্টিনিউয়াস লাইভ ডেটা ফিল্টারিং ট্র্যাকিংয়ের জন্য ক্যাশ বন্ধ করা হলো
+    cache: 'no-store' 
   });
   
   return res.json();

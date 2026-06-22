@@ -8,17 +8,17 @@ export default function SearchFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // ইউআরএল থেকে কারেন্ট ভ্যালুগুলো ডিফল্ট STATE হিসেবে নেওয়া হচ্ছে
+
   const [search, setSearch] = useState(searchParams.get('search') || '');
   const [category, setCategory] = useState(searchParams.get('category') || '');
   const [tone, setTone] = useState(searchParams.get('tone') || '');
   const [sortBy, setSortBy] = useState(searchParams.get('sortBy') || 'newest');
 
-  // কুয়েরি আপডেট করার গ্লোবাল মেথড
+
   const updateQueries = (newQueries) => {
     const params = new URLSearchParams(searchParams.toString());
     
-    // ফিল্টার চেঞ্জ হলে প্যাগিনেশন সবসময় পেজ ১ এ চলে যাবে
+
     params.set('page', '1'); 
 
     Object.keys(newQueries).forEach((key) => {
@@ -33,7 +33,7 @@ export default function SearchFilter() {
     router.refresh();
   };
 
-  // Debounce Search লজিক
+
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       updateQueries({ search });
@@ -74,7 +74,7 @@ export default function SearchFilter() {
           </select>
         </div>
 
-        {/* 🎭 Emotional Tone Dropdown */}
+        {/*  Emotional Tone Dropdown */}
         <div className="md:col-span-2">
           <select
             value={tone}
@@ -89,7 +89,7 @@ export default function SearchFilter() {
           </select>
         </div>
 
-        {/* ↕️ Sort By Dropdown */}
+        {/*  Sort By Dropdown */}
         <div className="md:col-span-3">
           <select
             value={sortBy}

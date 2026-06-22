@@ -9,7 +9,7 @@ export default async function PublicLessonsPage({ searchParams }) {
   const params = await searchParams;
   const user = await getServerSession();
   
-  // 🎯 পুরো params অবজেক্টটি পাঠানো হচ্ছে (যা সার্চ, ফিল্টার ও প্যাগিনেশন একসাথে হ্যান্ডেল করবে)
+
   const lessonData = await getAllLessons(params);
   
   const lessons = lessonData?.data || [];
@@ -33,7 +33,7 @@ export default async function PublicLessonsPage({ searchParams }) {
           </div>
         </div>
 
-        {/* 🎯 SEARCH & FILTER CONTROLS BAR */}
+        {/* SEARCH & FILTER CONTROLS BAR */}
         <SearchFilter />
 
         {/* GRID */}
