@@ -1,9 +1,12 @@
 'use client';
 
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // 👈 নতুন ইমপোর্ট করা হলো রাউটিং এর জন্য
 import { FiLock, FiCalendar, FiArrowRight, FiAward, FiSmile } from "react-icons/fi";
 
 export default function LessonCard({ lesson, user }) {
+  const router = useRouter(); // 👈 রাউটার ইনিশিয়েলাইজ করা হলো
+
   // 🔒 ১. প্রাইভেসি গার্ড: লেসন প্রাইভেট হলে কম্পোনেন্ট কিছুই রেন্ডার করবে না
   if (lesson?.visibility === "private") {
     return null;
@@ -11,15 +14,26 @@ export default function LessonCard({ lesson, user }) {
 
   const isPremiumUser = user?.plan === "premium";
 
-  // 🛠️ প্রিমিয়াম লক লজিক
+  // 🛠️ প্রিমিয়াম লক লজিক
   const isLocked = lesson.access === "premium" && !isPremiumUser;
 
   const createdDate = lesson.createdAt
     ? new Date(lesson.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
     : 'Recent';
 
-  // আপনার প্রোভাইড করা ডেটা স্কিমা অনুযায়ী ম্যাপ করা হয়েছে (creatorName)
+  // আপনার প্রোভাইড করা ডেটা স্কিমা অনুযায়ী ম্যাপ করা হয়েছে (creatorName)
   const authorName = lesson.creatorName || 'Anonymous';
+
+  // 🎯 কন্ডিশনাল রিডাইরেক্ট হ্যান্ডলার
+  const handleUpgradeClick = () => {
+    if (user) {
+      // ইউজার লগইন করা থাকলে প্রাইসিং পেজে যাবে
+      router.push("/pricing");
+    } else {
+      // ইউজার লগইন করা না থাকলে লগইন পেজে যাবে
+      router.push("/login");
+    }
+  };
 
   return (
     <div className="group relative h-full rounded-2xl border border-[#223753]/60 bg-gradient-to-b from-[#11243A] to-[#081221] p-6 flex flex-col justify-between shadow-xl hover:shadow-2xl hover:shadow-blue-500/5 hover:-translate-y-1.5 transition-all duration-500 overflow-hidden">
@@ -39,14 +53,15 @@ export default function LessonCard({ lesson, user }) {
           </h3>
 
           <p className="text-xs text-[#B8C4D6] mt-2 max-w-[200px] leading-relaxed">
-            Upgrade your membership matrix to unlock full community wisdom
+            {user ? "Upgrade your membership matrix to unlock full community wisdom" : "Please login or unlock premium blueprint matrix to continue"}
           </p>
 
+          {/* 🔘 কন্ডিশনাল বাটন */}
           <button
-            onClick={() => (window.location.href = "/pricing")}
+            onClick={handleUpgradeClick} // 👈 নতুন হ্যান্ডলার কল করা হলো
             className="mt-5 w-full max-w-[150px] py-2.5 rounded-xl bg-[#2563EB] hover:bg-[#3B82F6] active:bg-[#1D4ED8] text-white text-sm font-bold shadow-lg shadow-blue-500/20 transition-all duration-300 transform active:scale-95"
           >
-            Upgrade Plan
+            {user ? "Upgrade Plan" : "Login to Unlock"}
           </button>
         </div>
       )}
@@ -99,20 +114,29 @@ export default function LessonCard({ lesson, user }) {
             </span>
           </div>
 
-          {/* User/Author Node (Fixed Property Binding) */}
+          {/* User/Author Node */}
           <div className="flex items-center gap-2.5">
             {lesson.creatorImg ? (
               <img 
                 src={lesson.creatorImg} 
                 alt={authorName}
                 className="w-8 h-8 rounded-full border border-[#223753] object-cover"
-                onError={(e) => { e.target.style.display = 'none'; }} // ইমেজ লিংকে এরর থাকলে ফলব্যাক লেটার দেখাবে
+                onError={(e) => {
+                  e.target.onerror = null; // ইনফিনিট লুপ প্রোটেকশন
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'flex'; // ফ্যালব্যাক ডিভ শো করবে
+                }}
               />
-            ) : (
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#2563EB] to-indigo-600 flex items-center justify-center text-xs font-black text-white uppercase shadow-md shadow-blue-500/5">
-                {authorName[0]}
-              </div>
-            )}
+            ) : null}
+            
+            {/* ছবি ফেইল করলে বা না থাকলে ফ্যালব্যাক হিসেবে নামের প্রথম অক্ষর দেখানোর ডিভ */}
+            <div 
+              style={{ display: lesson.creatorImg ? 'none' : 'flex' }}
+              className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#2563EB] to-indigo-600 items-center justify-center text-xs font-black text-white uppercase shadow-md shadow-blue-500/5 shrink-0"
+            >
+              {authorName[0]}
+            </div>
+
             <div className="flex flex-col">
               <span className="text-xs text-[#7C8BA1]">Contributed by</span>
               <span className="text-xs font-bold text-[#F8FAFC] truncate max-w-[150px]">
