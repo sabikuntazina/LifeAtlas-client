@@ -16,8 +16,6 @@ export default function TopContributors() {
       try {
         const res = await fetch(`${BASE_URL}/api/lessons/top-contributors`, {
           method: "GET",
-
-          headers: await authHeader(),
         });
         const data = await res.json();
         console.log("Top:", data);
