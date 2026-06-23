@@ -40,7 +40,7 @@ export default function TopContributors() {
       <div className="absolute top-1/2 left-1/4 w-[350px] h-[350px] bg-[#2563EB]/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-12 relative z-10">
-        {/* 📢 সেকশন হেডার */}
+     
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#223753]/60 pb-6">
           <div>
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0D1B2A] border border-[#223753] text-[11px] font-mono font-bold uppercase tracking-widest text-[#3B82F6] mb-3">
