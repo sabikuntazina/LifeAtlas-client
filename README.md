@@ -1,36 +1,207 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🌱 LifeAtlas - Digital Life Lessons Platform
 
-## Getting Started
+## 📖 Project Overview
 
-First, run the development server:
+LifeAtlas is a full-stack web application where users can create, store, and share meaningful life lessons, personal growth insights, and wisdom gathered from real-life experiences.
+
+The platform encourages self-reflection, knowledge sharing, and community learning by allowing users to publish lessons publicly or privately, save favorite lessons, interact through likes and comments, and access premium content through a subscription system.
+
+---
+
+## 🚀 Live Website
+
+🔗 Live URL: https://life-atlas-client.vercel.app/
+
+---
+
+## 🎯 Project Purpose
+
+People often learn valuable lessons throughout life but eventually forget many of them. LifeAtlas provides a centralized platform where users can:
+
+- Preserve personal experiences and wisdom
+- Learn from other people's life lessons
+- Track personal growth
+- Save meaningful lessons for future reference
+- Access premium educational content
+
+---
+
+## ✨ Key Features
+
+### 🔐 Authentication & Authorization
+- Email & Password Authentication
+- Google Login Authentication
+- Better Auth Integration
+- Protected Routes
+- Role-Based Access (User / Admin)
+
+### 👤 User Features
+- Create Life Lessons
+- Upload Lesson Images (ImgBB Integration)
+- Save Lessons to Favorites
+- Like Lessons
+- Comment on Lessons
+- Update Existing Lessons
+- Delete Lessons
+- Manage User Profile
+
+### 📚 Lesson Management
+- Public & Private Visibility
+- Free & Premium Access Levels
+- Category Filtering
+- Emotional Tone Filtering
+- Search Functionality
+- Pagination Support
+
+### ⭐ Premium Features
+- Stripe Payment Integration
+- Premium Lesson Creation
+- Access Premium Lessons
+- Premium Badge System
+
+### 🛠️ Admin Features
+- Dashboard Analytics
+- Manage Users
+- Manage Lessons
+- Feature Lessons
+- Review Content
+- Handle Reported Lessons
+- Promote Users to Admin
+
+### 📊 Dashboard
+- User Statistics
+- Saved Lessons Count
+- Created Lessons Count
+- Recent Activities
+- Analytics Charts
+
+### 🎨 UI/UX
+- Fully Responsive Design
+- Modern Dashboard Layout
+- Loading States
+- Custom 404 Page
+- Toast Notifications
+- DaisyUI Components
+- Framer Motion Animations
+
+---
+
+## 🗄️ Database Collections
+
+### Users
+- name
+- email
+- image
+- role
+- plan
+- isPremium
+
+### Lessons
+- title
+- description
+- category
+- tone
+- visibility
+- access
+- image
+- likes
+- likesCount
+- savesCount
+- creatorInfo
+
+### Favorites
+- lessonId
+- userId
+- savedAt
+
+### Comments
+- lessonId
+- userId
+- comment
+- createdAt
+
+### Reports
+- lessonId
+- reporterId
+- reason
+- createdAt
+
+---
+
+## 🛠️ Technologies Used
+
+### Frontend
+- Next.js 16
+- React 19
+- Tailwind CSS
+- DaisyUI
+- React Icons
+- Framer Motion
+- React Hot Toast
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- Better Auth
+- Stripe
+
+### Cloud Services
+- ImgBB Image Hosting
+- MongoDB Atlas
+- Vercel Deployment
+
+---
+
+## 📦 NPM Packages Used
+
+### Client Side
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+next
+react
+react-dom
+tailwindcss
+daisyui
+react-icons
+react-toastify
+framer-motion
+axios
+better-auth
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Server Side
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+express
+mongodb
+cors
+dotenv
+better-auth
+stripe
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+## 📱 Responsive Design
 
-To learn more about Next.js, take a look at the following resources:
+The application is fully optimized for:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Mobile Devices
+- Tablets
+- Laptops
+- Desktop Screens
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🌟 Future Improvements
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Social Sharing
+- PDF Export
+- Activity Heatmap
+- Lesson Streak Tracking
+- AI Lesson Recommendations
+- Dark / Light Theme Switcher
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+### Developed with ❤️ using Next.js, MongoDB, Better Auth & Stripe
