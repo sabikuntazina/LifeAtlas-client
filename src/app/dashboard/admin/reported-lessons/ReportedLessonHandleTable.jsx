@@ -11,7 +11,7 @@ export default function ReportedLessonHandleTable({ initialData = [] }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
 
-  // 🗑️ DELETE LESSON HANDLER (No double alert)
+
   const handleDeleteLesson = async (lessonId) => {
     const loadingToast = toast.loading("Processing lesson removal...");
     setIsActionLoading(true);
@@ -19,11 +19,11 @@ export default function ReportedLessonHandleTable({ initialData = [] }) {
     try {
       const res = await deleteReportedLessonPermanently(lessonId);
 
-      // রেসপন্স চেক (res অথবা res.success)
+     
       if (res) {
         setReportedLessonsData((prev) => prev.filter((item) => item.lessonId !== lessonId));
         toast.success("Lesson has been permanently removed.", { id: loadingToast });
-        setIsModalOpen(false); // কাজ শেষে মডাল অটো ক্লোজ
+        setIsModalOpen(false); 
       } else {
         toast.error("Failed to delete the lesson. Please try again.", { id: loadingToast });
       }
@@ -35,7 +35,7 @@ export default function ReportedLessonHandleTable({ initialData = [] }) {
     }
   };
 
-  // ✅ IGNORE REPORT HANDLER (No double alert)
+
   const handleIgnoreReport = async (lessonId) => {
     const loadingToast = toast.loading("Clearing reports...");
     setIsActionLoading(true);
@@ -46,7 +46,7 @@ export default function ReportedLessonHandleTable({ initialData = [] }) {
       if (res) {
         setReportedLessonsData((prev) => prev.filter((item) => item.lessonId !== lessonId));
         toast.success("Reports dismissed. Lesson marked safe.", { id: loadingToast });
-        setIsModalOpen(false); // কাজ শেষে মডাল অটো ক্লোজ
+        setIsModalOpen(false); 
       } else {
         toast.error("Failed to ignore reports. Please try again.", { id: loadingToast });
       }

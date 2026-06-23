@@ -35,17 +35,17 @@ export default function LessonActions({ id, lesson, user }) {
 
   // ⚠️ REPORT BUTTON CLICK HANDLER
   const handleReportClick = () => {
-    if (!user) return alert("Login required to report");
-    setIsModalOpen(true); // মডালটি ওপেন করবে
+    if (!user) return toast.info("Login required to report");
+    setIsModalOpen(true); 
   };
 
-  // ✅ CONFIRM REPORT FUNCTION (মডালের ভেতর থেকে কল হবে)
+ 
   const handleConfirmReport = async () => {
     try {
       setIsReporting(true);
       await postReportLesson(lesson);
       toast.success("🚨 Thank you for reporting. Administration will review this module shortly.");
-      setIsModalOpen(false); // কাজ শেষে মডাল ক্লোজ হবে
+      setIsModalOpen(false); 
     } catch (err) {
       console.error("Reporting Error:", err);
       toast.error("Something went wrong while reporting!");
@@ -56,7 +56,7 @@ export default function LessonActions({ id, lesson, user }) {
 
   // 📥 SAVE LESSON FUNCTION
   const handleSaveLesson = async () => {
-    if (!user) return alert("Login required");
+    if (!user) return toast.info("Login required");
 
     try {
       setSaving(true);
@@ -98,7 +98,7 @@ export default function LessonActions({ id, lesson, user }) {
 
   // ❤️ LIKE LESSON FUNCTION
   const handleLikedLesson = async () => {
-    if (!user) return alert("Login required");
+    if (!user) return toast.info("Login required");
     if (liked) return toast.info("Already liked this lesson!");
 
     try {
@@ -138,7 +138,7 @@ export default function LessonActions({ id, lesson, user }) {
 
   // 💬 COMMENT LESSON FUNCTION
   const handleComment = async () => {
-    if (!user) return alert("Login required");
+    if (!user) return toast.info("Login required");
     if (!commentText.trim()) return toast.warning("Comment cannot be empty!"); 
 
     const newCommentLocal = {
