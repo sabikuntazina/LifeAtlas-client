@@ -1,12 +1,21 @@
+// src/app/dashboard/admin/manage-lessons/page.jsx
+
 import { getAllLessons } from '@/lib/api/getAllLessons';
 import React from 'react';
 import { FiBookOpen } from 'react-icons/fi';
 import ManageLessonsTable from './ManageLessonsTable';
 
-
 const ManageLessonPage = async () => {
+  // ১. এপিআই কল করা হলো
+  const apiResponse = await getAllLessons();
 
-  const lessons = await getAllLessons() || [];
+  // 🎯 ফিক্সড: যদি এপিআই থেকে সরাসরি অ্যারে না এসে অবজেক্ট (যেমন: apiResponse.data) আসে, 
+  // তবে সেটি ডিফেন্সিভলি হ্যান্ডেল করা হলো যেন কোনোভাবেই ক্র্যাশ না করে।
+  const lessons = Array.isArray(apiResponse)
+    ? apiResponse
+    : apiResponse?.data && Array.isArray(apiResponse.data)
+    ? apiResponse.data
+    : [];
 
   return (
     <div className="min-h-screen bg-[#081221] text-[#F8FAFC] px-4 py-8 md:py-12 antialiased selection:bg-[#3B82F6]/30">

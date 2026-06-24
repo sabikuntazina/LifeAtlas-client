@@ -5,8 +5,9 @@ import { FiUsers } from 'react-icons/fi';
 
 
 const UserManagePage = async () => {
-  // ডাটাবেজ থেকে ইউজারদের ইনফরমেশন আনা
+
   const usersInformation = await getUserInformation() || [];
+  
 
   return (
     <div className="min-h-screen bg-[#081221] text-[#F8FAFC] px-4 py-8 md:py-12 antialiased selection:bg-[#3B82F6]/30">

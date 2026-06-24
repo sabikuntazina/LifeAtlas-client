@@ -13,22 +13,24 @@ import { postFeaturedLesson } from '@/lib/adminFunctions/featuredFunction';
 import { deleteLesson } from '@/lib/action/lessons';
 
 export default function ManageLessonsTable({ initialLessons }) {
-  const [lessons, setLessons] = useState(initialLessons);
+  // 🎯 ফিক্সড: initialLessons ভুলবশত অ্যারে না হলে যেন ক্র্যাশ না করে খালি অ্যারে ডিফল্ট সেট হবে
+  const safeLessons = Array.isArray(initialLessons) ? initialLessons : [];
   
-  // 🎯 State for handling which lesson is opened in modals
+  const [lessons, setLessons] = useState(safeLessons);
+  
   const [selectedLessonToFeatured, setSelectedLessonToFeatured] = useState(null);
   const [selectedLessonToDelete, setSelectedLessonToDelete] = useState(null);
   
-  // 🔍 Filter States
-  const [searchQuery, setSearchQuery] = useState(''); // 👈 নতুন সার্চ কুয়েরি স্টেট
+  const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
   const [visibilityFilter, setVisibilityFilter] = useState('all');
   const [accessFilter, setAccessFilter] = useState('all');
 
+  // 🎯 ফিক্সড: এরর খাওয়া লাইনটি সেফ করা হলো
   const categories = useMemo(() => {
-    const allCats = initialLessons.map(l => l.category).filter(Boolean);
+    const allCats = safeLessons.map(l => l?.category).filter(Boolean);
     return ['all', ...new Set(allCats)];
-  }, [initialLessons]);
+  }, [safeLessons]);
 
   // 🛠️ ফিল্টারিং লজিক (সার্চ কুয়েরিসহ কম্বাইন্ড)
   const filteredLessons = useMemo(() => {
