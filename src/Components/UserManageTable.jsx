@@ -2,10 +2,11 @@
 
 import { updateUserInformation } from '@/lib/adminFunctions/usersCollection';
 import React, { useState } from 'react';
-import { FiMail, FiCalendar, FiRefreshCw, FiChevronDown } from 'react-icons/fi';
+import { FiMail, FiCalendar, FiRefreshCw, FiChevronDown, FiBookOpen } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
 export default function UserManageTable({ initialUsers }) {
+  // ব্যাকএন্ড থেকে আসা ইউজার লিস্ট স্টেট-এ সেট করা হলো
   const [users, setUsers] = useState(initialUsers);
   const [updatingId, setUpdatingId] = useState(null);
 
@@ -17,27 +18,25 @@ export default function UserManageTable({ initialUsers }) {
     );
   };
 
-const handleUpdateUser = async (user) => {
-  try {
-    setUpdatingId(user._id);
-    
-   
-    const res = await updateUserInformation(user);
-    console.log("Update Response:", res);
+  const handleUpdateUser = async (user) => {
+    try {
+      setUpdatingId(user._id);
+      
+      const res = await updateUserInformation(user);
+      console.log("Update Response:", res);
 
-  
-    if (res && res.success !== false) {
-      toast.success(`${user.name || 'User'} updated successfully!`);
-    } else {
-      toast.error(res?.message || "Failed to update user parameters.");
+      if (res && res.success !== false) {
+        toast.success(`${user.name || 'User'} updated successfully!`);
+      } else {
+        toast.error(res?.message || "Failed to update user parameters.");
+      }
+    } catch (error) {
+      console.error("Error updating user:", error);
+      toast.error("Network error, please try again!");
+    } finally {
+      setUpdatingId(null);
     }
-  } catch (error) {
-    console.error("Error updating user:", error);
-    toast.error("Network error, please try again!");
-  } finally {
-    setUpdatingId(null);
-  }
-};
+  };
 
   return (
     <div className="card bg-[#11243A] border border-[#223753]/60 rounded-2xl shadow-2xl overflow-hidden">
@@ -52,6 +51,8 @@ const handleUpdateUser = async (user) => {
               <th className="py-5 bg-transparent">Role Configuration</th>
               <th className="py-5 bg-transparent">Subscription Plan</th>
               <th className="py-5 bg-transparent">Joined Date</th>
+              {/* 🎯 টোটাল লেসন কলামের হেডার */}
+              <th className="py-5 bg-transparent">Total Lessons</th>
               <th className="py-5 pr-6 text-right bg-transparent">Commit</th>
             </tr>
           </thead>
@@ -60,7 +61,8 @@ const handleUpdateUser = async (user) => {
           <tbody className="divide-y divide-[#223753]/40 text-xs text-white/90">
             {users.length === 0 ? (
               <tr>
-                <td colSpan="6" className="text-center py-12 text-[#7C8BA1] text-sm">
+                {/* 🎯 কলাম সংখ্যা ৭ হওয়ায় colSpan="7" করা হয়েছে */}
+                <td colSpan="7" className="text-center py-12 text-[#7C8BA1] text-sm">
                   No users found in the database.
                 </td>
               </tr>
@@ -101,7 +103,7 @@ const handleUpdateUser = async (user) => {
                       </div>
                     </td>
 
-                    {/* 🛠️ PREMIUM ROLE DROPDOWN */}
+                    {/* ROLE DROPDOWN */}
                     <td className="py-4">
                       <div className="relative inline-block w-32">
                         <select
@@ -122,7 +124,7 @@ const handleUpdateUser = async (user) => {
                       </div>
                     </td>
 
-                    {/* 🛠️ PREMIUM PLAN DROPDOWN */}
+                    {/* PLAN DROPDOWN */}
                     <td className="py-4">
                       <div className="relative inline-block w-36">
                         <select
@@ -148,6 +150,16 @@ const handleUpdateUser = async (user) => {
                       <div className="flex items-center gap-1.5">
                         <FiCalendar size={13} className="text-[#7C8BA1]" />
                         {joinedDate}
+                      </div>
+                    </td>
+
+                    {/* 🎯 TOTAL LESSONS COUNTER (নতুন কলাম ডাটা) */}
+                    <td className="py-4">
+                      <div className="text-sm text-[#B8C4D6] flex items-center gap-2">
+                        <FiBookOpen className="text-[#3B82F6] shrink-0" size={14} />
+                        <span className="font-mono font-bold text-white">
+                          {user.totalLessons || 0}
+                        </span>
                       </div>
                     </td>
 

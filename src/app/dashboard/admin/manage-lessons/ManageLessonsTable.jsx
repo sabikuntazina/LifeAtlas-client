@@ -6,14 +6,14 @@ import {
 } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 
-// 🔌 Separate Components Import
+
 import FeaturedModal from './FeaturedModal';
 import DeleteModal from './DeleteModal';
 import { postFeaturedLesson } from '@/lib/adminFunctions/featuredFunction';
 import { deleteLesson } from '@/lib/action/lessons';
 
 export default function ManageLessonsTable({ initialLessons }) {
-  // 🎯 ফিক্সড: initialLessons ভুলবশত অ্যারে না হলে যেন ক্র্যাশ না করে খালি অ্যারে ডিফল্ট সেট হবে
+ 
   const safeLessons = Array.isArray(initialLessons) ? initialLessons : [];
   
   const [lessons, setLessons] = useState(safeLessons);
@@ -26,31 +26,30 @@ export default function ManageLessonsTable({ initialLessons }) {
   const [visibilityFilter, setVisibilityFilter] = useState('all');
   const [accessFilter, setAccessFilter] = useState('all');
 
-  // 🎯 ফিক্সড: এরর খাওয়া লাইনটি সেফ করা হলো
   const categories = useMemo(() => {
     const allCats = safeLessons.map(l => l?.category).filter(Boolean);
     return ['all', ...new Set(allCats)];
   }, [safeLessons]);
 
-  // 🛠️ ফিল্টারিং লজিক (সার্চ কুয়েরিসহ কম্বাইন্ড)
+ 
   const filteredLessons = useMemo(() => {
     return lessons.filter((lesson) => {
-      // ০. সার্চ ফিল্টার (টাইটেল ম্যাচিং - কেস সেনসিটিভ ছাড়া)
+    
       const lessonTitle = lesson.title ? lesson.title.toLowerCase() : '';
       const matchSearch = lessonTitle.includes(searchQuery.toLowerCase());
 
-      // ১. ক্যাটাগরি ফিল্টার
+    
       const matchCategory = categoryFilter === 'all' || lesson.category === categoryFilter;
       
-      // ২. ভিজিবিলিটি ফিল্টার
+     
       const currentVisibility = lesson.visibility || 'public'; 
       const matchVisibility = visibilityFilter === 'all' || currentVisibility === visibilityFilter;
       
-      // ৩. এক্সেস ফিল্টার
+    
       const currentAccess = lesson.access || 'free';
       const matchAccess = accessFilter === 'all' || currentAccess === accessFilter;
 
-      // সবগুলো কন্ডিশন একসাথে ট্রু হলে তবেই ডেটা দেখাবে
+    
       return matchSearch && matchCategory && matchVisibility && matchAccess;
     });
   }, [lessons, searchQuery, categoryFilter, visibilityFilter, accessFilter]);
