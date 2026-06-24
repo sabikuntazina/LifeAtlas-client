@@ -92,11 +92,11 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* 📱 MOBILE: CENTER BRAND LOGO (মোবাইলে লোগো মাঝে দেখানোর জন্য) */}
+        {/* 📱 MOBILE: CENTER BRAND LOGO  */}
         <div className="navbar-center flex lg:hidden items-center gap-1.5">
           <Image src="/assets/logo.png" alt="logo" width={32} height={32} className="object-contain" />
-          <Link href="/" className="text-lg font-bold tracking-wide">
-            <span className="text-[#3B82F6]">LIFE</span>ATLAS
+          <Link href="/" className="md:text-lg font-bold tracking-wide">
+            <span className="text-[#3B82F6]">Life</span>Atlas
           </Link>
         </div>
 
@@ -118,7 +118,7 @@ const Navbar = () => {
                 <li>
                   <Link
                     href="/register"
-                    className="bg-[#11243A] hover:bg-[#3B82F6] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl border border-[#223753] text-xs sm:text-sm font-medium transition-colors"
+                    className="bg-[#11243A] hover:bg-[#3B82F6] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl hidden md:inline border border-[#223753] text-xs sm:text-sm font-medium transition-colors"
                   >
                     Signup
                   </Link>
