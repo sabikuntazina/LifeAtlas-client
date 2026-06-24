@@ -1,21 +1,20 @@
-// src/app/dashboard/admin/manage-lessons/page.jsx
-
 import { getAllLessons } from '@/lib/api/getAllLessons';
 import React from 'react';
 import { FiBookOpen } from 'react-icons/fi';
 import ManageLessonsTable from './ManageLessonsTable';
+import Pagination from '@/Components/Pagination';
 
-const ManageLessonPage = async () => {
-  // ১. এপিআই কল করা হলো
-  const apiResponse = await getAllLessons();
 
-  // 🎯 ফিক্সড: যদি এপিআই থেকে সরাসরি অ্যারে না এসে অবজেক্ট (যেমন: apiResponse.data) আসে, 
-  // তবে সেটি ডিফেন্সিভলি হ্যান্ডেল করা হলো যেন কোনোভাবেই ক্র্যাশ না করে।
-  const lessons = Array.isArray(apiResponse)
-    ? apiResponse
-    : apiResponse?.data && Array.isArray(apiResponse.data)
-    ? apiResponse.data
-    : [];
+const ManageLessonPage = async ({ searchParams }) => {
+
+  const resolvedParams = await searchParams;
+  const currentPage = Number(resolvedParams?.page) || 1;
+
+  const apiResponse = await getAllLessons(resolvedParams);
+
+
+  const lessons = apiResponse?.data && Array.isArray(apiResponse.data) ? apiResponse.data : [];
+  const totalPages = Number(apiResponse?.totalPage) || 1;
 
   return (
     <div className="min-h-screen bg-[#081221] text-[#F8FAFC] px-4 py-8 md:py-12 antialiased selection:bg-[#3B82F6]/30">
@@ -34,7 +33,7 @@ const ManageLessonPage = async () => {
           </div>
           <div className="stats bg-[#11243A] border border-[#223753]/60 text-white shadow rounded-xl px-4 py-2">
             <div className="stat p-0 flex flex-col justify-center">
-              <div className="stat-title text-xs text-[#7C8BA1] font-medium uppercase tracking-wider">Total Lessons</div>
+              <div className="stat-title text-xs text-[#7C8BA1] font-medium uppercase tracking-wider">Lessons on Page</div>
               <div className="stat-value text-xl font-bold text-[#3B82F6]">{lessons.length}</div>
             </div>
           </div>
@@ -42,6 +41,9 @@ const ManageLessonPage = async () => {
 
         {/* INTERACTIVE LESSONS TABLE & FILTERS */}
         <ManageLessonsTable initialLessons={lessons} />
+
+        {/* 📊 DYNAMIC PAGINATION CONTROL */}
+        <Pagination currentPage={currentPage} totalPages={totalPages} />
 
       </div>
     </div>
