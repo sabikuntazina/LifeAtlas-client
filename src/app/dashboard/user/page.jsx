@@ -59,7 +59,7 @@ export default function UserDashboardPage() {
         }
       } catch (err) {
         console.error("Dashboard network connection error:", err);
-        // ফলব্যাক ডেমো চার্ট ডেটা (এপিআই ডাউন বা কানেক্ট না হলে গ্রাফ ব্ল্যাঙ্ক না রেখে জিরো দেখাবে)
+       
         setDashboardData(prev => ({
           ...prev,
           chartData: [

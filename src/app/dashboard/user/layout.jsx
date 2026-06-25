@@ -1,6 +1,8 @@
 import { getServerSession } from '@/lib/core/session';
 import { redirect } from 'next/navigation';
-import React from 'react';
+export const metadata = {
+  title: "LifeAtlas User Dashboard",
+};
 
 const UserLayoutPage =async ({children}) => {
  const user =await getServerSession();
