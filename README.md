@@ -158,15 +158,14 @@ People often learn valuable lessons throughout life but eventually forget many o
 ### Client Side
 
 ```bash
-next
+next.js
 react
-react-dom
 tailwindcss
 daisyui
 react-icons
 react-toastify
 framer-motion
-axios
+rechart
 better-auth
 ```
 
