@@ -12,6 +12,8 @@ export const getUserInformation=async()=>{
     return res.json();
 }
 
+
+
 //updating user
 export const updateUserInformation=async(user)=>{
    const res = await fetch(`${BASE_URL}/users/update/${user._id}`, {
@@ -25,3 +27,20 @@ export const updateUserInformation=async(user)=>{
         const data = await res.json();
         return data;
 }
+
+
+// all lesson e specific creator er sob lesson gulo dekhar jonno
+export const getSpecificCreatorInformation = async (creatorId) => {
+  const res = await fetch(`${BASE_URL}/users/creator-info/${creatorId}`, {
+    cache: 'no-store'
+  });
+  return res.json();
+};
+
+//Creator er sob lesson anar jonno. jodio eta ami age ekbar korchi user er nijer lessons gulo anar jonno , but code bujhar jonno eta alada kore korlam
+export const getCreatorLessons = async (creatorId) => {
+  const res = await fetch(`${BASE_URL}/lessons/creator/${creatorId}`, {
+    cache: 'no-store'
+  });
+  return res.json();
+};

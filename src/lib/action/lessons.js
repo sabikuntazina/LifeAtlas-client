@@ -27,6 +27,15 @@ export const getMyLessons = async (creatorId,page) => {
   console.log("Data in response", res)
   return res.json();
 };
+export const getMyLessonsInProfile = async (creatorId) => {
+  
+  const res = await fetch(`${BASE_URL}/lessons/my/profile/${creatorId}`,
+    {
+      cache: 'no-store'
+    }
+  );
+  return res.json();
+};
 
 
 

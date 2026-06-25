@@ -4,6 +4,7 @@ import { getServerSession } from "@/lib/core/session";
 import React from "react";
 import { FiBookmark, FiHeart, FiMessageCircle } from "react-icons/fi";
 import LessonActions from "./LessonActions";
+import { getSpecificCreatorInformation } from "@/lib/adminFunctions/usersCollection";
 
 const LessonDetailsPage = async ({ params }) => {
 
@@ -11,14 +12,8 @@ const LessonDetailsPage = async ({ params }) => {
   const user= await getServerSession();
 
   const lesson = await getLessonPubliclyById(id);
+  
   // console.log(lesson);
-
- 
-  
-    
-
-  
-
   // NOT FOUND STATE
   if (!lesson) {
     return (
