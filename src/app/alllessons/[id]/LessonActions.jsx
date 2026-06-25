@@ -159,36 +159,40 @@ export default function LessonActions({ id, lesson, user }) {
   };
 
   // COMMENT FUNCTION
-  const handleComment = async () => {
-    if (!user) return toast.info("Login required");
-    if (!commentText.trim()) return toast.warning("Comment cannot be empty!"); 
 
-    const newCommentLocal = {
+const handleComment = async () => {
+  if (!user) return toast.info("Login required");
+  if (!commentText.trim()) return toast.warning("Comment cannot be empty!"); 
+
+  const newCommentLocal = {
+    text: commentText,         
+    userId: user.id,
+    userName: user.name,
+    userImage: user.image || user.userImage || null, 
+    createdAt: new Date().toISOString(), 
+  };
+
+  try {
+    setCommenting(true);
+    const commentPayload = {
+      lessonId: lessonId, 
       text: commentText,         
       userId: user.id,
       userName: user.name,
-      createdAt: new Date().toISOString(), 
+      userImage: user.image || user.userImage || null, // 👈 ব্যাকএন্ডেও ইমেজ পাঠাতে চাইলে এটিও যুক্ত করুন
     };
-
-    try {
-      setCommenting(true);
-      const commentPayload = {
-        lessonId: lessonId, 
-        text: commentText,         
-        userId: user.id,
-        userName: user.name,
-      };
-      await postComment(commentPayload);
-      setCommentsList((prev) => [newCommentLocal, ...prev]); 
-      setCommentCount((prev) => prev + 1);
-      setCommentText(""); 
-      toast.success("Comment added successfully!");
-    } catch (err) {
-      toast.error("Something went wrong while commenting!");
-    } finally {
-      setCommenting(false);
-    }
-  };
+    
+    await postComment(commentPayload);
+    setCommentsList((prev) => [newCommentLocal, ...prev]); 
+    setCommentCount((prev) => prev + 1);
+    setCommentText(""); 
+    toast.success("Comment added successfully!");
+  } catch (err) {
+    toast.error("Something went wrong while commenting!");
+  } finally {
+    setCommenting(false);
+  }
+};
 
   return (
     <div className="min-h-screen bg-[#081221] text-[#F8FAFC] px-4 py-12 md:py-20 antialiased">
