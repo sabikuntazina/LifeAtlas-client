@@ -2,7 +2,7 @@
 
 import { deleteReportedLessonPermanently, deleteReportedLessonToIgnore } from '@/lib/adminFunctions/reportLesson';
 import React, { useState } from 'react';
-import { FiEye, FiCheckCircle, FiX, FiAlertCircle } from 'react-icons/fi';
+import { FiEye, FiCheckCircle, FiX, FiAlertCircle, FiClipboard } from 'react-icons/fi';
 import { toast } from 'react-hot-toast';
 
 export default function ReportedLessonHandleTable({ initialData = [] }) {
@@ -11,7 +11,6 @@ export default function ReportedLessonHandleTable({ initialData = [] }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isActionLoading, setIsActionLoading] = useState(false);
 
-
   const handleDeleteLesson = async (lessonId) => {
     const loadingToast = toast.loading("Processing lesson removal...");
     setIsActionLoading(true);
@@ -19,7 +18,6 @@ export default function ReportedLessonHandleTable({ initialData = [] }) {
     try {
       const res = await deleteReportedLessonPermanently(lessonId);
 
-     
       if (res) {
         setReportedLessonsData((prev) => prev.filter((item) => item.lessonId !== lessonId));
         toast.success("Lesson has been permanently removed.", { id: loadingToast });
@@ -34,7 +32,6 @@ export default function ReportedLessonHandleTable({ initialData = [] }) {
       setIsActionLoading(false);
     }
   };
-
 
   const handleIgnoreReport = async (lessonId) => {
     const loadingToast = toast.loading("Clearing reports...");
@@ -74,6 +71,7 @@ export default function ReportedLessonHandleTable({ initialData = [] }) {
               <tr className="bg-[#0D1B2A] border-b border-[#223753] text-[#B8C4D6] uppercase text-xs tracking-wider">
                 <th className="p-4 md:p-5">Lesson Details</th>
                 <th className="p-4 md:p-5">Category</th>
+                <th className="p-4 md:p-5">Latest Reason</th> {/* 🎯 নতুন কলাম */}
                 <th className="p-4 md:p-5 text-center">Reports Count</th>
                 <th className="p-4 md:p-5 text-right">Actions</th>
               </tr>
@@ -84,7 +82,7 @@ export default function ReportedLessonHandleTable({ initialData = [] }) {
                 <tr key={lesson._id} className="hover:bg-[#152B45]/40 transition-colors duration-150">
                   
                   {/* Lesson Details */}
-                  <td className="p-4 md:p-5 max-w-xs md:max-w-sm">
+                  <td className="p-4 md:p-5 max-w-xs">
                     <div className="font-bold text-[#F8FAFC] truncate text-sm md:text-base">
                       {lesson.title || "Untitled Lesson"}
                     </div>
@@ -100,6 +98,13 @@ export default function ReportedLessonHandleTable({ initialData = [] }) {
                     </span>
                   </td>
 
+                  {/* 🎯 Latest Reason Column */}
+                  <td className="p-4 md:p-5 text-sm max-w-[180px]">
+                    <p className="text-xs text-red-300 font-medium truncate bg-red-500/5 border border-red-500/10 px-2 py-1 rounded-lg">
+                      {lesson.lastReportedReason || "Reason not provided"}
+                    </p>
+                  </td>
+
                   {/* Report Count */}
                   <td className="p-4 md:p-5 text-center">
                     <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-black bg-red-500/10 text-red-400 border border-red-500/20">
@@ -107,7 +112,7 @@ export default function ReportedLessonHandleTable({ initialData = [] }) {
                     </span>
                   </td>
 
-                  {/* Table Action (Only View Details) */}
+                  {/* Table Action */}
                   <td className="p-4 md:p-5 text-right">
                     <button 
                       onClick={() => {
@@ -151,17 +156,42 @@ export default function ReportedLessonHandleTable({ initialData = [] }) {
             </div>
 
             <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+              
+              {/* 🎯 MODAL SPECIFIC: ALL REPORTED REASONS LIST */}
+              <div className="bg-[#081221]/60 border border-[#223753]/60 rounded-xl p-4 space-y-2.5">
+                <div className="flex items-center gap-2 text-red-400 text-sm font-semibold">
+                  <FiClipboard size={16} />
+                  <span>Logged Violations ({selectedLesson.reportCount || 1}):</span>
+                </div>
+                <div className="border-t border-[#223753]/40 pt-2">
+                  {selectedLesson.reasons && selectedLesson.reasons.length > 0 ? (
+                    <ul className="list-disc list-inside space-y-1.5 text-xs text-[#B8C4D6]">
+                      {selectedLesson.reasons.map((reason, index) => (
+                        <li key={index} className="leading-relaxed">
+                          <span className="text-[#F8FAFC]">{reason}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-xs text-[#7C8BA1] italic">
+                      {selectedLesson.lastReportedReason || "No explicit reason logged."}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Description Block */}
               <div className="bg-[#081221]/60 border border-[#223753]/60 rounded-xl p-4 space-y-3">
                 <div className="flex items-start gap-2 text-amber-400 text-sm font-semibold">
                   <FiAlertCircle size={18} className="shrink-0 mt-0.5" />
-                  <span>Report Summary:</span>
+                  <span>Lesson Metadata Summary:</span>
                 </div>
                 
                 <div className="border-t border-[#223753]/40 pt-3 space-y-2 text-sm text-[#B8C4D6]">
                   <div>
-                    <span className="text-[#7C8BA1]">Primary Description:</span>
-                    <p className="mt-1 text-[#F8FAFC] bg-[#0D1B2A]/40 p-3 rounded-lg border border-[#223753]/30 text-xs leading-relaxed">
-                      {selectedLesson.description || "No description provided during report initialization."}
+                    <span className="text-[#7C8BA1] text-xs">Lesson Description:</span>
+                    <p className="mt-1 text-[#B8C4D6] bg-[#0D1B2A]/40 p-3 rounded-lg border border-[#223753]/30 text-xs leading-relaxed max-h-[100px] overflow-y-auto">
+                      {selectedLesson.description || "No description provided."}
                     </p>
                   </div>
 
@@ -179,6 +209,7 @@ export default function ReportedLessonHandleTable({ initialData = [] }) {
                   </div>
                 </div>
               </div>
+
             </div>
 
             {/* Modal Actions */}

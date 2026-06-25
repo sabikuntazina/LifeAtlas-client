@@ -51,16 +51,23 @@ export default function LessonActions({ id, lesson, user }) {
     );
   }
 
-  // REPORT HANDLERS
+// REPORT HANDLERS
   const handleReportClick = () => {
     if (!user) return toast.info("Login required to report");
     setIsModalOpen(true); 
   };
 
-  const handleConfirmReport = async () => {
+  const handleConfirmReport = async (selectedReason) => {
     try {
       setIsReporting(true);
-      await postReportLesson(currentLesson);
+      
+      const reportPayload = {
+        ...currentLesson,
+        reportReason: selectedReason, 
+        reportedBy: user ? { id: user.id, name: user.name } : null 
+      };
+
+      await postReportLesson(reportPayload);
       toast.success("🚨 Report submitted successfully.");
       setIsModalOpen(false); 
     } catch (err) {

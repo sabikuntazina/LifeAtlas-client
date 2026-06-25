@@ -20,7 +20,7 @@ const slides = [
       'Discover valuable lessons shared by people around the world. Learn from successes, failures, and real-life experiences.',
     primaryBtn: {
       text: 'Explore Lessons',
-      href: '/public-lessons',
+      href: '/alllessons',
     },
     secondaryBtn: {
       text: 'Join Now',
@@ -38,7 +38,7 @@ const slides = [
       'Share lessons you have learned through life and help others avoid mistakes and discover better paths.',
     primaryBtn: {
       text: 'All Lessons',
-      href: '/alllesson',
+      href: '/alllessons',
     },
   },
   {
@@ -51,8 +51,8 @@ const slides = [
     description:
       'Save important lessons, revisit them anytime, and create your own collection of life-changing insights.',
     primaryBtn: {
-      text: 'Upgrade Plan',
-      href: '/pricing',
+      text: 'Create an account',
+      href: '/register',
     },
   },
 ]
