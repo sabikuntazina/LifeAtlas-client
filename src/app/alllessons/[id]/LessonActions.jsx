@@ -262,7 +262,7 @@ export default function LessonActions({ id, lesson, user }) {
                     <p className="text-xs text-[#B8C4D6]">{currentLesson.creatorRole || "Instructor"}</p>
                   </div>
                 </div>
-                <Link href={`/alllessons/creatorProfile/${currentLesson.creatorId || ''}`} className="inline-flex items-center gap-1.5 text-xs font-bold bg-[#2563EB] hover:bg-[#3B82F6] text-white px-3.5 py-2 rounded-xl transition-all shadow-md">
+                <Link href={`/alllessons/creatorprofile/${currentLesson.creatorId || ''}`} className="inline-flex items-center gap-1.5 text-xs font-bold bg-[#2563EB] hover:bg-[#3B82F6] text-white px-3.5 py-2 rounded-xl transition-all shadow-md">
                   <span>View Profile</span>
                   <FiArrowUpRight size={14} />
                 </Link>
