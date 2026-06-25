@@ -6,9 +6,11 @@ import MyLessonsInProfile from './MyLessonsInProfile';
 
 const Profile =async () => {
   const user = await getServerSession();
+  // console.log(user)
    const myLessons= await getMyLessonsInProfile(user?.id);
+   console.log(myLessons)
   return (
-    <div>
+    <div className='space-y-8'>
       <ProfilePageAction user={user} ></ProfilePageAction>
       <MyLessonsInProfile user={user} lessons={myLessons} ></MyLessonsInProfile>
     </div>
