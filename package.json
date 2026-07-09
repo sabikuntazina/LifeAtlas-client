@@ -16,6 +16,7 @@
     "jose-cjs": "^6.2.3",
     "mongodb": "^7.3.0",
     "next": "^16.2.9",
+    "nextjs-toploader": "^3.9.17",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "react-hot-toast": "^2.6.0",

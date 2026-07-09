@@ -4,9 +4,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { FiSearch } from 'react-icons/fi';
 
-export default function SearchFilter() {
+export default function SearchFilter({page}) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  console.log("searchParams:", searchParams.toString())
 
 
   const [search, setSearch] = useState(searchParams.get('search') || '');
@@ -17,7 +18,7 @@ export default function SearchFilter() {
 
   const updateQueries = (newQueries) => {
     const params = new URLSearchParams(searchParams.toString());
-    
+      console.log("Params:", params.toString())
 
     params.set('page', '1'); 
 

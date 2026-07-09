@@ -16,7 +16,7 @@ export default function Pagination({ currentPage, totalPages }) {
     params.set('page', pageNumber);
 
     // ১. URL পরিবর্তন হবে (কোনো ফুল পেজ রিলোড ছাড়া)
-    router.push(`?${params.toString()}`, { scroll: false });
+    router.push(`?${params.toString()}`, { scroll: true });
 
     // 🎯 ২. এই লাইনটি সার্ভার কম্পোনেন্টকে ফোর্স করবে ব্যাকঅ্যান্ড থেকে নতুন ডেটা রি-ফেচ করতে
     router.refresh(); 

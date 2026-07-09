@@ -17,6 +17,7 @@ export const getMyLessons = async (creatorId,page) => {
     if(!page){
     page=1
   }
+  console.log(page)
   
   const res = await fetch(`${BASE_URL}/lessons/my/${creatorId}?page=${page}`,
     {

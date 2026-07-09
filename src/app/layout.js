@@ -1,15 +1,16 @@
 
 
 
-
-
 import dns from 'node:dns';
 dns.setServers(['8.8.8.8', '8.8.4.4']);
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
+
+
 import "./globals.css";
 import Navbar from "@/Components/Navbar";
 import Footer from "@/Components/Footer";
 import { ToastContainer } from "react-toastify";
+import NextTopLoader from 'nextjs-toploader';
 
 const poppins= Poppins({
   variable: "--font-poppins",
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
         </main>
         <Footer></Footer>
          <ToastContainer />
+         <NextTopLoader />
         </body>
     </html>
   );

@@ -7,6 +7,7 @@ import { getServerSession } from "@/lib/core/session";
 
 export default async function PublicLessonsPage({ searchParams }) {
   const params = await searchParams;
+  console.log(params)
   const user = await getServerSession();
   
 
@@ -34,7 +35,7 @@ export default async function PublicLessonsPage({ searchParams }) {
         </div>
 
         {/* SEARCH & FILTER CONTROLS BAR */}
-        <SearchFilter />
+        <SearchFilter page={page} />
 
         {/* GRID */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -11,7 +11,9 @@ import { toast } from "react-toastify"
 
 const RegisterPage = () => {
   const [error, setError] = useState("")
+ 
   const router = useRouter()
+  //  const [loading,setLoading]=useState(false)
   const handleRegister = async (e) => {
     e.preventDefault()
 
