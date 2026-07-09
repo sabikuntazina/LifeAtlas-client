@@ -8,6 +8,8 @@ The platform encourages self-reflection, knowledge sharing, and community learni
 
 ---
 
+<img src="public/assets/screenshort.png" alt="LifeAtlas Screenshot" width="900">
+
 ## 🚀 Live Website
 
 🔗 Live URL: https://life-atlas-client.vercel.app/
